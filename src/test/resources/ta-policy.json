@@ -24,6 +24,7 @@
 		// Uncalled functions
 		{
 			violation_name : "UNTESTED-FN",
+			suppressed_by_rule_regex : "UNTESTED-SRC",
 			aggregation_granularity : "function",
 			minimum_line_coverage_pct : 100,
 			use_filters : [
