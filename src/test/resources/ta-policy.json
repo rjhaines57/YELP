@@ -1,0 +1,148 @@
+{
+	// Title: COMPANY NAME
+	// Description: Testing Policy - v2
+	// Author:
+	// Date:
+	type : "Coverity test policy definition",
+	format_version : 1,
+	// Define these two date cutoffs to adjust the gutter display of 'code age'
+	recent_date_cutoff : "2015-03-15", // Young, Most recent code = '|||'
+	old_date_cutoff : "2015-01-01", // Old, Legacy code = '|'
+	// Test Advisor Violations - see filter definitions below
+	rules : [
+		// Uncalled files - no functions tested in a single source file
+
+		{
+			violation_name : "UNTESTED-SRC",
+			aggregation_granularity : "file",
+			minimum_line_coverage_pct : 1, // only zero percent can cause a violation - i.e. entire set of functions untested
+			use_filters : [
+				"common-set", // common set of filters
+			]
+		},
+
+		// Uncalled functions
+		{
+			violation_name : "UNTESTED-FN",
+			aggregation_granularity : "function",
+			minimum_line_coverage_pct : 100,
+			use_filters : [
+				"untested-function", // not executed
+				"common-set", // common set of filters
+			]
+		}, 	],
+
+	// --- Filter definitions used by any of the rules above ---
+	define_filters : [
+		// common set of filters to be used in each rule above
+		{
+			filter_name : "common-set",
+			use_filters : [
+				"ignore-test-files",
+				"ignore-simple-functions",
+			]
+		},
+		// --- individual filter definitions ---
+
+		{
+			filter_name : "tested-function",
+			function_filters : [{
+					is_executed : true // if at least one test calls this function
+				}
+			]
+		}, {
+			filter_name : "untested-function",
+			function_filters : [{
+					is_executed : false
+				}
+			]
+		},
+		{
+			filter_name : "ignore-test-files",
+			file_filters : [{
+					not : {
+						or : [{
+								file_name_regex : ".*[Tt]est\\.c"
+							}, {
+								file_name_regex : ".*/[Tt]est/.*"
+							}, {
+                                file_name_regex : ".*/unit_[Tt]est/.*"
+                            }
+													
+						]
+					}
+				}
+			]
+		},
+		// This filter excludes lines that have been marked with certain special comments in the source code. The choice of what
+		// comments to treat as special is arbitrary.
+		{
+			filter_name : "ignore-special-comments",
+			line_filters : [{
+					not : { // Exclude lines where
+						line_regex : "//.*cov-ignore" // the line's text matches the regex "//.*covignore"
+					},
+					exclusion_reason : "marked with \"cov-ignore\""
+				}, {
+					not : { // Exclude lines that
+						start_section_regex : // are between a line matching
+						"//.*cov-begin-ignore", // the regex "//.*cov-begin-ignore"
+						end_section_regex : // and a line matching
+						"//.*cov-end-ignore" // the regex "//.*cov-end-ignore".
+					},
+					exclusion_reason : "between \"cov-begin-ignore\" and \"cov-end-ignore\""
+				}
+			]
+		},
+		// This filter ignores lines that call a log4j logger. Often,
+		// when such lines are uncovered, it is because they are on a
+		// debug path. Even when that isn't the case, they are rarely
+		// interesting to cover in their own right.
+		{
+			filter_name : "ignore-logging",
+			line_filters : [{
+					not : { // Ignore any line that
+						contains_astnode : { // contains a node that
+							call_to_named_function : // is a call to a function whose
+							"(L|l)ogger\\.(warn|error|info|debug)" // name matches the given regex.
+						}
+					},
+					exclusion_reason : "logging call"
+				}
+			]
+		},
+		// This filter ignores everything inside a "catch" block.
+		// It is in the "impossible" section just because it is most closely associated with the others here.
+		{
+			filter_name : "ignore-catch-blocks",
+			line_filters : [{
+					not : { // Ignore any line that
+						contains_astnode : { // contains a node that
+							contained_by_astnode : { // is contained by
+								statement_kind : "catch" // a "catch" statement.
+							}
+						}
+					},
+					exclusion_reason : "catch block"
+				}
+			]
+		},
+		// This filter only passes functions which involve at least one decision (i.e. functions which have more than one path through them).
+		{
+			filter_name : "ignore-simple-functions",
+			function_filters : [{
+					min_ccm : 2,
+					exclusion_reason : "function is simple"
+				}
+			]
+		}, {
+			filter_name : "only-complex-functions",
+			function_filters : [{
+					min_ccm : 20,
+					exclusion_reason : "function is not complex"
+				}
+			]
+		},
+	], // end of define_filters
+}
+// end

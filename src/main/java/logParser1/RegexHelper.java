@@ -34,9 +34,7 @@ public class RegexHelper {
 			// System.out.println("Here 1:"+capture.groupCount());
 
 		}
-
 		return groups;
-
 	}
 
 	public HashMap<String, String> matchGroups(String string) {
