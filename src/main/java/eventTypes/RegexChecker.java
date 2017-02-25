@@ -27,7 +27,6 @@ public class RegexChecker implements SimpleEventInterface {
 	
 	private SimpleEventDataModel config;
 	private boolean captureMetadata;
-	boolean pidFilter = false;
 	String triggerText;
 	Line triggerLine;
 	Integer readAheadCount;
@@ -61,13 +60,13 @@ public class RegexChecker implements SimpleEventInterface {
 		this.captureMetadata = false;
 
 		// System.out.println("Found error:");
-		String rawData = new String();
+		StringBuffer rawData = new StringBuffer() ;
 		Integer startIndex = buffer.size() - this.readAheadCount - this.config.readBehind;
 		if (startIndex < 0)
 			startIndex = 0;
 		System.out.println("startIndex:" + startIndex);
 		for (Line line : buffer.subList(startIndex, buffer.size() - 1)) {
-			rawData += line.getRawData() + "\\r\\n";
+			rawData.append(line.getRawData() + "\\r\\n");
 			if (config.captureRegexes != null) {
 				for (RegexHelper regex : config.captureRegexes) {
 					map.putAll(regex.matchGroups(line.getRawData()));
@@ -81,7 +80,7 @@ public class RegexChecker implements SimpleEventInterface {
 
 		}
 		map.put("triggerText", this.triggerText);
-		map.put("rawData", rawData);
+		map.put("rawData", rawData.toString());
 
 		readAheadCount = 0;
 		return event;

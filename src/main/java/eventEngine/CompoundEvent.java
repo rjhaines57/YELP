@@ -48,7 +48,7 @@ public class CompoundEvent extends Event {
 
 	public String getEventHash() {
 
-		String tmp = new String();
+		StringBuffer tmp = new StringBuffer();
 
 		for (Event event : this.events) {
 
@@ -59,13 +59,13 @@ public class CompoundEvent extends Event {
 					if (entry.getKey().contentEquals("triggerText"))
 						continue;
 
-					tmp += entry.getKey();
-					tmp += entry.getValue();
+					tmp.append(entry.getKey());
+					tmp.append(entry.getValue());
 				}
 			}
 		}
 
-		return tmp;
+		return tmp.toString();
 
 	}
 

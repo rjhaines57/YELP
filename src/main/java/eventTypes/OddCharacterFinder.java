@@ -33,17 +33,17 @@ public class OddCharacterFinder implements SimpleEventInterface {
 		}
 		if (!positions.isEmpty())
 		{
-			String eventText="";
+			StringBuffer eventText=new StringBuffer();
 			for (Integer[] index:positions)
 			{
-				eventText+=" (char:"+index[0]+" offset:"+index[1]+")";
+				eventText.append(" (char:"+index[0]+" offset:"+index[1]+")");
 			}
 				
 			
 			Event event=new Event(myLine,this,Event.Priority.HIGH);
 	    	event.setLinePos(0);
 	    	HashMap<String,String> map=new HashMap<String,String>();
-	    	map.put("positions",eventText);
+	    	map.put("positions",eventText.toString());
 	    	event.setEventMetaData(map);
 			return event;
 			

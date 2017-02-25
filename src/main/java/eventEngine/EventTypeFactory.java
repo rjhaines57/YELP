@@ -84,7 +84,7 @@ public class EventTypeFactory {
 
 		try {
 			BufferedReader br = new BufferedReader(
-					new InputStreamReader(new FileInputStream("D:\\Development\\workspace\\logParser1\\checkerDefinition.json"), StandardCharsets.UTF_8));
+					new InputStreamReader(new FileInputStream("D:\\Development\\workspace\\logParser1\\src\\main\\resources\\checkerDefinition.json"), StandardCharsets.UTF_8));
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(RegexHelper.class, new RegexHelperDeserializer());
 			gsonBuilder.registerTypeAdapter(Event.Priority.class, new EventPriorityDeserializer());

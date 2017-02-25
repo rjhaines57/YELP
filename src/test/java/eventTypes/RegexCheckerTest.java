@@ -1,6 +1,7 @@
 package eventTypes;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,9 @@ public class RegexCheckerTest {
 	}
 
 	@Test
-	public void testCheckLine() {
+	public void testCheckLine_Simple() {
+		
+		
 		SimpleEventDataModel model=new SimpleEventDataModel();
 		model.eventType="regex";
 		model.eventName="test_regex";
@@ -66,4 +69,29 @@ public class RegexCheckerTest {
 		assertEquals(e.getEventMetaData().get("errNo"),"56");
 	}
 
+	@Test
+	public void testCheckLine_WithMetaData() {
+		SimpleEventDataModel model=new SimpleEventDataModel();
+		model.eventType="regex";
+		model.eventName="test_regex";
+		model.triggerRegex=new RegexHelper("(?<type>(warning)).*?#(?<errNo>[0-9]+):");
+		model.priority=Event.Priority.MEDIUM;
+		model.summary="test checker";
+		RegexChecker regexChecker=new RegexChecker(model);
+		Line myLine=new Line();
+		myLine.setRawData("This is a warning line with number #56:");
+		
+		ArrayList<Line> buffer=new ArrayList<Line>();
+		
+		
+		Event e=regexChecker.checkLine(myLine,buffer);
+		
+		assert(e!=null);
+		assert(e.getEventMetaData()!=null);
+		assert(e.getEventMetaData().containsKey("type"));
+		assertEquals(e.getEventMetaData().get("type"),"warning");
+		assertEquals(e.getEventMetaData().get("errNo"),"56");
+	
+		
+	}
 }

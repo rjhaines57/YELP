@@ -58,19 +58,19 @@ public class Event {
 			// Meta data exists, try to do some substitutions
 			Integer regexStartIndex=0;
 			Integer lastStartIndex=0;
-			String newDescriptionLine=new String();
+			StringBuffer newDescriptionLine=new StringBuffer();
 			Pattern match=Pattern.compile("<[\\w]+>");
 			Matcher regexMatcher=match.matcher(descriptionLine);
 			while (regexMatcher.find())
 			{
-				newDescriptionLine+=descriptionLine.substring(lastStartIndex,regexMatcher.start());
+				newDescriptionLine.append(descriptionLine.substring(lastStartIndex,regexMatcher.start()));
 				lastStartIndex=regexMatcher.end();
 				String field=regexMatcher.group(0).substring(1, regexMatcher.group(0).length()-1);
 
 				if (this.eventMetaData.containsKey(field))
 				{
 					// System.out.println("DEBUG2:"+this.eventMetaData.get(field));
-					newDescriptionLine+=this.eventMetaData.get(field);
+					newDescriptionLine.append(this.eventMetaData.get(field));
 				}
 
 
@@ -78,10 +78,10 @@ public class Event {
 			// Copy end of string
 			if (lastStartIndex<descriptionLine.length()-1)
 			{
-				newDescriptionLine=descriptionLine.substring(lastStartIndex,descriptionLine.length());
+				newDescriptionLine.append(descriptionLine.substring(lastStartIndex,descriptionLine.length()));
 			}
 
-			newDescription.add(newDescriptionLine);
+			newDescription.add(newDescriptionLine.toString());
 		}
 
 		return newDescription;
@@ -157,7 +157,7 @@ public class Event {
 	public String getEventHash()
 	{
 
-		String tmp=new String();
+		StringBuffer tmp= new StringBuffer();
 
 		if (this.eventMetaData==null)
 			return null;
@@ -170,11 +170,11 @@ public class Event {
 			if (entry.getKey().contentEquals("triggerText"))
 				continue;
 			
-			tmp+=entry.getKey();
-			tmp+=entry.getValue();
+			tmp.append(entry.getKey());
+			tmp.append(entry.getValue());
 		}
 
-		return tmp;
+		return tmp.toString();
 
 
 	}
