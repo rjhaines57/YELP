@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.gson.JsonDeserializer;
 
 import eventEngine.Event;
-import eventEngine.EventDataModel;
+import eventEngine.SimpleEventDataModel;
 import eventEngine.EventTypeFactory;
 import eventEngine.SimpleEventInterface;
 import eventEngine.Event.Priority;
@@ -25,7 +25,7 @@ public class RegexChecker implements SimpleEventInterface {
 	        Logger.getLogger(EventTypeFactory.class.getName());
 	
 	
-	private EventDataModel config;
+	private SimpleEventDataModel config;
 	private boolean captureMetadata;
 	boolean pidFilter = false;
 	String triggerText;
@@ -37,7 +37,7 @@ public class RegexChecker implements SimpleEventInterface {
 
 	}
 
-	public RegexChecker(EventDataModel config) {
+	public RegexChecker(SimpleEventDataModel config) {
 		this.captureMetadata = false;
 		this.config = config;
 		this.readAheadCount = 0;

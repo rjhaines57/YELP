@@ -97,12 +97,12 @@ public class EventTypeFactory {
 			// for now.
 			Gson gson = gsonBuilder.create();
 
-			SimpleEventDataModel model = gson.fromJson(br, SimpleEventDataModel.class);
+			TopEventDataModel model = gson.fromJson(br, TopEventDataModel.class);
 			assert(model!=null);
 			
 			
 			br.close();
-			for (EventDataModel config : model.events) {
+			for (SimpleEventDataModel config : model.events) {
 
 				if (config.disable != null && config.disable.contentEquals("true")) {
 					continue;
