@@ -1,0 +1,204 @@
+{
+	
+		"events": 
+		[
+			{
+				"eventType": "regex",
+				"eventName": "compilation_error",
+				"triggerRegex": "(?<type>(error)) #(?<errNo>[0-9]+):",
+				"severity": "high",
+				"summary": "Emit compilation error <type> type <errNo> file <fileName> at line <lineNo>",
+				"description": 
+				[
+					"Emit compilation <type> type <errNo> file <fileName> at line <lineNo>",
+					"Full Capture is:<rawData>"
+				],
+
+				"captureRegexes": 
+				[
+					"line (?<lineNo>[\\d]+):",
+					"(?<type>(error|warning)) #(?<errNo>[0-9]+)",
+					"\"(?<fileName>[^\"]+)\", line (?<lineNo>[\\d]+):"
+				],
+
+				"readBehind": 1,
+				"linesToCapture": 3
+			},
+
+			{
+				"eventType": "regex",
+				"eventName": "compilation_warning",
+				"triggerRegex": "(?<type>(warning)) #(?<errNo>[0-9]+):",
+				"priority": "MEDIUM",
+				"summary": "Emit compilation <type> type <errNo> "
+			},
+
+			{
+				"disable": "true",
+				"eventType": "regex",
+				"eventName": "Tool version (cov-build)",
+				"triggerRegex": "cov-build (?<version>([0-9.]+)) ",
+				"severity": "info",
+				"summary": "cov-build version is <version>"
+			},
+
+			{
+				"disable": "true",
+				"eventType": "regex",
+				"eventName": "cov-build command",
+				"triggerRegex": "cov-build expanded command:(?<arguments>(.*))",
+				"severity": "info",
+				"summary": "cov-build arguments: <arguments>"
+			},
+
+			{
+				"eventType": "regex",
+				"eventName": "cov_emit_executed",
+				"triggerRegex": ".*COMPILING: [^ ]*cov-translate (?<compiler>[^ ]+) ",
+				"severity": "info",
+				"summary": "cov-translate executed with compiler [<compiler>] [<triggerText>"
+			},
+
+			{
+				"disable": "true",
+				"eventType": "regex",
+				"eventName": "100_percent",
+				"triggerRegex": "Emitted [0-9]+ (?<language>.*) compilation units [(]100%[)] successfully",
+				"triggerRegex1": "Emitted [0-9]+ (?<language>[^ ]+) compilation units (100%) successfully  ",
+				"severity": "info",
+				"summary": "compile 100% of files for <language>"
+			},
+
+			{
+				"eventType": "regex",
+				"eventName": "compile_percent",
+				"triggerRegex": " Emitted [0-9]+ (?<language>.*) compilation units [(](?<percent>[0-9]+)%[)] successfully",
+				"triggerRegex1": "Emitted [0-9]+ (?<language>[^ ]+) compilation units (100%) successfully  ",
+				"severity": "info",
+				"summary": "Only compiled <percent>% of files for <language>"
+			},
+			{
+				"eventType": "regex",
+				"eventName": "native_compiler_executed",
+				"triggerRegex": "EXECUTING: (?<compiler>[^ ]*(gcc|g[+][+]|cc|c[+][+]|cxx|cl6x|iccarm)) .*",
+				"excludeRegex": "cc1plus",
+				"severity": "info",
+				"summary": "native compiler executed Compiler:[<compiler>] [<triggerText>]"
+			},
+		
+			{
+				"disable": "true",
+				"eventType": "regex",
+				"eventName": "Function not emitted",
+				"triggerRegex": "\"(?<function>(.*))\" not emitted",
+				"severity": "medium",
+				"summary": "Function not emitted <function> in File <fileName>",
+				"captureRegexes": 
+				[
+					"\"(?<fileName>[^\"]+)\", line (?<lineNo>[\\d]+):"
+				],
+
+				"readBehind": 1,
+				"linesToCapture": 5
+			},
+			{
+				"eventType": "regex",
+				"eventName": "Emit Crash!",
+				"triggerRegex": "assertion failed:",
+				"severity": "high",
+				"summary": "Emit crash \"<error>\" in <location>",
+				"description": 
+				[
+					"Emit crash \"<error>\" in <location>",
+					"<rawData>"
+				],
+
+				"captureRegexes": 
+				[
+					"(?<location>[^:]+:[0-9]+):",
+					"assertion failed: (?<error>(.*))"
+				],
+
+				"readBehind": 1,
+				"linesToCapture": 5,
+				"endCaptureRegex": "^$"
+			}
+		]
+		,
+			"checkers": 
+		[
+			{
+				"checkerName": "Missing Compiler Config",
+				"eventKey": "compiler",
+				"transitions": 
+				[
+					{
+						"state": "start",
+						"event": "native_compiler_executed",
+						"next_state": "running"
+					},
+					{
+						"state": "running",
+						"event": "cov_emit_executed",
+						"next_state": "finished"
+					},
+
+					{
+						"state": "running",
+						"event": "end_of_file",
+						"next_state": "display"
+					}
+				],
+				"priority": "high",
+				"summary": "The compiler (cc or c++) was invoked but it doesn't look like there was a corresponding emit"
+			}
+			,
+			{
+				"checkerName": "not 100 Percent",
+				"eventKey": "language",
+				"transitions": 
+				[
+					{
+						"state": "start",
+						"event": "start_of_file",
+						"next_state": "running"
+					},
+					{
+						"state": "start",
+						"event": "compile_percent",
+						"condition": { "key":"percent", "operation":"equals", "value":"100" }, 
+						"next_state": "finished"
+					},
+					{
+						"state": "start",
+						"event": "end_of_file",
+						"next_state": "display"
+					}
+					
+				],
+				"summary": "The following languages did not build 100% ",
+				"priority": "high"
+			},
+			
+			{
+				"checkerName":"Random Character",
+				"transitions":
+				[
+					{
+						"state": "start",
+						"event": "compilation_error",
+						"next_state" : "running"
+					},
+					{
+						"state": "running",
+						"event": "odd_character_finder",
+						"next_state": "display"
+					}
+				],
+				"summary": "A non Ascii character has been found as well as a compilation error",
+				"priority": "high"		
+			}
+			
+		]
+
+}
