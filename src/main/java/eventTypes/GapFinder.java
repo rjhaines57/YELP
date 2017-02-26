@@ -3,6 +3,8 @@ package eventTypes;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 import eventEngine.Event;
 import eventEngine.SimpleEventInterface;
@@ -10,6 +12,9 @@ import eventEngine.Event.Priority;
 import logParser1.Line;
 
 public class GapFinder implements SimpleEventInterface {
+
+	private static final Logger logger = Logger.getLogger(GapFinder.class.getName());
+
 	
 	private ArrayList<String> description;
 	private String summary;
@@ -26,7 +31,7 @@ public class GapFinder implements SimpleEventInterface {
 	private LocalDateTime previousTime;
 	
 	@Override
-	public Event checkLine(Line myLine, ArrayList<Line> buffer) {
+	public ArrayList<Event> checkLine(Line myLine, ArrayList<Line> buffer) {
 	
 		// No previous time and current line has a date
 		if (previousTime==null && myLine.getDate()!=null)
@@ -43,7 +48,7 @@ public class GapFinder implements SimpleEventInterface {
 			if (seconds>GAP)
 			{
 				Event event=new Event(myLine,this,Event.Priority.HIGH);
-				return event;
+				return new ArrayList<Event>(Arrays.asList(event));
 			}
 						
 		}

@@ -3,9 +3,14 @@ package logParser1;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.logging.Logger;
+
+import eventTypes.CompoundChecker;
 
 public class LineParser {
 
+	private static final Logger logger = Logger.getLogger(CompoundChecker.class.getName());
+	
 	private
 		Integer currentLine;
 	
@@ -18,7 +23,7 @@ public class LineParser {
 		}
 		catch (DateTimeParseException e)
 		{
-		//System.out.println("Failed to parse DateTime at line "+this.currentLine+" with content:"+dateString);	
+		//logger.log(Level.INFO,"Failed to parse DateTime at line "+this.currentLine+" with content:"+dateString);	
 		
 		}
 		
@@ -53,7 +58,7 @@ public class LineParser {
 			myLine.setPID(Integer.parseInt(elements[2]));
 			} catch (NumberFormatException e)
 			{
-			//	System.out.println("Failed to parse Integer at line "+this.currentLine+" with content:"+elements[2]);
+			//	logger.log(Level.INFO,"Failed to parse Integer at line "+this.currentLine+" with content:"+elements[2]);
 			}
 			}
 			
@@ -69,7 +74,7 @@ public class LineParser {
 			myLine.setPID(Integer.parseInt(elements2[1]));
 			} catch (NumberFormatException e)
 			{
-				//System.out.println("Failed to parse Integer at line "+this.currentLine+" with content:"+elements2[1]);
+				//logger.log(Level.INFO,"Failed to parse Integer at line "+this.currentLine+" with content:"+elements2[1]);
 			}
 		}
 			

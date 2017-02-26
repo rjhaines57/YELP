@@ -1,6 +1,7 @@
 package eventTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,12 +60,12 @@ public class RegexChecker implements SimpleEventInterface {
 		event.setEventMetaData(map);
 		this.captureMetadata = false;
 
-		// System.out.println("Found error:");
+		// logger.log(Level.INFO,"Found error:");
 		StringBuffer rawData = new StringBuffer() ;
 		Integer startIndex = buffer.size() - this.readAheadCount - this.config.readBehind;
 		if (startIndex < 0)
 			startIndex = 0;
-		System.out.println("startIndex:" + startIndex);
+		logger.log(Level.INFO,"startIndex:" + startIndex);
 		for (Line line : buffer.subList(startIndex, buffer.size() - 1)) {
 			rawData.append(line.getRawData() + "\\r\\n");
 			if (config.captureRegexes != null) {
@@ -88,8 +89,8 @@ public class RegexChecker implements SimpleEventInterface {
 	}
 
 	@Override
-	public Event checkLine(Line myLine, ArrayList<Line> buffer) {
-		// System.out.println("Found error"+myLine.getRawData());
+	public ArrayList<Event> checkLine(Line myLine, ArrayList<Line> buffer) {
+		// logger.log(Level.INFO,"Found error"+myLine.getRawData());
 
 		Matcher triggerMatcher = this.config.triggerRegex.getPattern().matcher(myLine.getRawData());
 		
@@ -119,7 +120,7 @@ public class RegexChecker implements SimpleEventInterface {
 				map.putAll(config.triggerRegex.matchGroups(myLine.getRawData()));
 				map.put("triggerText", this.triggerText);
 				event.setEventMetaData(map);
-				return event;
+				return new ArrayList<Event>(Arrays.asList(event));
 			}
 		}
 
@@ -137,7 +138,7 @@ public class RegexChecker implements SimpleEventInterface {
 					&& (endTriggerMatcher != null && !endTriggerMatcher.find())) {
 				readAheadCount += 1;
 			} else {
-				return captureMetadata(buffer);
+				return new ArrayList<Event>(Arrays.asList(captureMetadata(buffer)));
 			}
 		}
 

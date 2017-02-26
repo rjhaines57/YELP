@@ -57,7 +57,7 @@ public class EventTypeFactory {
 		public Event.Priority deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 				throws JsonParseException {
 
-			// System.out.println("Cannot map
+			// logger.log(Level.INFO,"Cannot map
 			// priority:"+json.getAsJsonPrimitive().getAsString().toLowerCase());
 			logger.log(Level.FINEST, "Trying to map priority:" + json.getAsJsonPrimitive().getAsString().toLowerCase());
 
@@ -109,7 +109,7 @@ public class EventTypeFactory {
 				}
 
 				if (config.eventType != null && config.eventType.contentEquals("regex")) {
-					System.out.println("Added checker:" + config.eventName);
+					logger.log(Level.INFO,"Added checker:" + config.eventName);
 					eventList.add(new RegexChecker(config));
 				}
 

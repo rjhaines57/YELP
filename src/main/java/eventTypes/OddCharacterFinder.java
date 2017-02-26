@@ -1,7 +1,9 @@
 package eventTypes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import eventEngine.Event;
 import eventEngine.SimpleEventInterface;
@@ -10,6 +12,9 @@ import logParser1.Line;
 
 public class OddCharacterFinder implements SimpleEventInterface {
 
+	private static final Logger logger = Logger.getLogger(OddCharacterFinder.class.getName());
+
+	
 	private final String summary;
 	public OddCharacterFinder()
 	{
@@ -17,7 +22,7 @@ public class OddCharacterFinder implements SimpleEventInterface {
 	}
 	
 	@Override
-	public Event checkLine(Line myLine, ArrayList<Line> buffer) {
+	public ArrayList<Event> checkLine(Line myLine, ArrayList<Line> buffer) {
 		ArrayList<Integer[]> positions=new ArrayList<Integer[]>();
 		
 		for (int i = 0; i < myLine.getRawData().length(); i++)
@@ -45,8 +50,9 @@ public class OddCharacterFinder implements SimpleEventInterface {
 	    	HashMap<String,String> map=new HashMap<String,String>();
 	    	map.put("positions",eventText.toString());
 	    	event.setEventMetaData(map);
-			return event;
-			
+	    	
+			return new ArrayList<Event>(Arrays.asList(event));
+		
 		}
 		else
 			return null;

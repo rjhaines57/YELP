@@ -2,11 +2,15 @@ package logParser1;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexHelper {
 
+	private final static Logger logger = Logger.getLogger(LogParser.class.getName());
+	
 	private String regex;
 	private ArrayList<String> groups;
 	private Pattern pattern;
@@ -28,10 +32,10 @@ public class RegexHelper {
 		Matcher capture = this.captureNameFinder.matcher(regex);
 		while (capture.find()) {
 			for (Integer i = 1; i <= capture.groupCount(); i += 1) {
-				System.out.println("Found group in regex [" + this.regex + "] :[" + capture.group(i) + "]");
+				logger.log(Level.INFO,"Found group in regex [" + this.regex + "] :[" + capture.group(i) + "]");
 				groups.add(capture.group(i));
 			}
-			// System.out.println("Here 1:"+capture.groupCount());
+			// logger.log(Level.INFO,"Here 1:"+capture.groupCount());
 
 		}
 		return groups;

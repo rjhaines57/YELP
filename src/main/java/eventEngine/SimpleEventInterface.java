@@ -6,6 +6,6 @@ import logParser1.Line;
 
 public interface SimpleEventInterface extends EventTypeInterface {
 
-	public Event checkLine(Line myLine, ArrayList<Line> buffer);
+	public ArrayList<Event> checkLine(Line myLine, ArrayList<Line> buffer);
 
 }

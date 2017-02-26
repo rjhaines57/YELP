@@ -118,14 +118,15 @@ public class CompoundChecker implements CompoundEventInterface {
 			if (currentState.get(keyValue).contentEquals("display")) {
 				
 				HashMap<String, String> map = new HashMap<String, String>();
+				map.put("keyValue", keyValue);
 				CompoundEvent newEvent = new CompoundEvent(eventList.get(keyValue).get(0).getLine(), this, this.config.priority,eventList.get(keyValue));
 				newEvent.setEventMetaData(map);
 				newEvents.add(newEvent);
 				
-				System.out.println("AWOOOGA ["+newEvent.getSummary()+"]"+this.config.priority);
-			//	System.out.println("This was caused by the following events:");
+				logger.log(Level.INFO,"AWOOOGA ["+eventList.get(keyValue)+"]"+newEvent.getSummary()+"]"+this.config.priority);
+			//	logger.log(Level.INFO,"This was caused by the following events:");
 			//	for (Event savedEvent : eventList.get(keyValue)) {
-			//		System.out.println("	Event:" + savedEvent.getSummary());
+			//		logger.log(Level.INFO,"	Event:" + savedEvent.getSummary());
 			//	}
 				currentState.put(keyValue, "finished");
 			}

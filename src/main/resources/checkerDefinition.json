@@ -176,7 +176,7 @@
 					}
 					
 				],
-				"summary": "The following languages did not build 100% ",
+				"summary": "The following language:<keyValue> did not build 100%",
 				"priority": "high"
 			},
 			

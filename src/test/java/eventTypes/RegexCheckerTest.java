@@ -60,8 +60,9 @@ public class RegexCheckerTest {
 		
 		ArrayList<Line> buffer=new ArrayList<Line>();
 		
-		Event e=regexChecker.checkLine(myLine,buffer);
+		ArrayList<Event> events=regexChecker.checkLine(myLine,buffer);
 		
+		Event e=events.get(0);
 		assert(e!=null);
 		assert(e.getEventMetaData()!=null);
 		assert(e.getEventMetaData().containsKey("type"));
@@ -84,8 +85,9 @@ public class RegexCheckerTest {
 		ArrayList<Line> buffer=new ArrayList<Line>();
 		
 		
-		Event e=regexChecker.checkLine(myLine,buffer);
+ArrayList<Event> events=regexChecker.checkLine(myLine,buffer);
 		
+		Event e=events.get(0);
 		assert(e!=null);
 		assert(e.getEventMetaData()!=null);
 		assert(e.getEventMetaData().containsKey("type"));

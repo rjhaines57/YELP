@@ -23,9 +23,10 @@ import eventTypes.SimpleEventType;
 
 public class LogParser {
 
-	ArrayList<Event> events;
 	private final static Logger logger = Logger.getLogger(LogParser.class.getName());
 
+	ArrayList<Event> events;
+	
 	public static void main(String[] args) {
 
 		logger.log(Level.WARNING, "Testing info level");
@@ -91,18 +92,19 @@ public class LogParser {
 
 				for (SimpleEventInterface eventType : events) {
 
-					Event event = eventType.checkLine(myLine, lineBuffer);
-					if (event != null) {
+					ArrayList<Event> newEvents = eventType.checkLine(myLine, lineBuffer);
 
-						eventList.add(event);
-						for (CompoundEventInterface checker : checkers) {
-							logger.log(Level.SEVERE,"Size of list:"+eventList.size());
-							eventList.addAll(checker.processState(event));
-							logger.log(Level.SEVERE,"Size of list2:"+eventList.size());
+					if (newEvents != null) {
+						for (Event event : newEvents) {
+							eventList.add(event);
+							for (CompoundEventInterface checker : checkers) {
+
+								eventList.addAll(checker.processState(event));
+
+							}
+
 						}
-
 					}
-
 				}
 
 				lineNo += 1;
@@ -113,30 +115,28 @@ public class LogParser {
 			Event endOfFileEvent = new Event(new Line(), endOfFile, Event.Priority.INFO);
 			eventList.add(endOfFileEvent);
 			for (CompoundEventInterface checker : checkers) {
-				logger.log(Level.SEVERE,"Size of list3:"+eventList.size());
+				logger.log(Level.SEVERE, "Size of list3:" + eventList.size());
 				eventList.addAll(checker.processState(endOfFileEvent));
-				logger.log(Level.SEVERE,"Size of list4:"+eventList.size());
+				logger.log(Level.SEVERE, "Size of list4:" + eventList.size());
 			}
 
 			HashMap<String, Event> map = new HashMap<String, Event>();
 			for (Event e : eventList) {
-	
+
 				String eventDigest = e.getEventHash();
 
 				if (eventDigest != null) {
 
 					if (map.containsKey(eventDigest)) {
-						//continue;
+						// continue;
 					}
 					map.put(eventDigest, e);
 
 				}
 
-				System.out.println("Event at line:" + e.getPriority() + ":" + e.getLine().getLineNo() + " :"
-						+ e.getDescription());
-					
-				
-			
+				System.out.println(
+						"Event at line:" + e.getPriority() + ":" + e.getLine().getLineNo() + " :" + e.getDescription());
+
 			}
 
 		} catch (IOException x) {

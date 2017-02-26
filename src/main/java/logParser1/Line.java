@@ -1,86 +1,84 @@
 package logParser1;
 
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
+import eventTypes.CompoundChecker;
 
 public class Line {
-		private
-			String rawData;
-			Integer lineNo;
-			LocalDateTime date;
-			String processName;
-			Integer PID;
-			String level;
-			String data;
-		
-		public
-			Line()
-			{
-				date=null;
-				processName=null;
-				PID=null;
-				level=null;
-				data=null;
-			}
 
-		public LocalDateTime getDate() {
-			return date;
-		}
+	private static final Logger logger = Logger.getLogger(CompoundChecker.class.getName());
 
-		public void setDate(LocalDateTime date) {
-			this.date = date;
-		}
+	private String rawData;
+	private Integer lineNo;
+	private LocalDateTime date;
+	private String processName;
+	private Integer PID;
+	private String level;
+	private String data;
 
-		public String getProcessName() {
-			return processName;
-		}
+	public Line() {
+		date = null;
+		processName = null;
+		PID = null;
+		level = null;
+		data = null;
+	}
 
-		public void setProcessName(String processName) {
-			this.processName = processName;
-		}
+	public LocalDateTime getDate() {
+		return date;
+	}
 
-		public Integer getPID() {
-			return PID;
-		}
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
 
-		public void setPID(Integer pID) {
-			PID = pID;
-		}
+	public String getProcessName() {
+		return processName;
+	}
 
-		public String getLevel() {
-			return level;
-		}
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
 
-		public void setLevel(String level) {
-			this.level = level;
-		}
+	public Integer getPID() {
+		return PID;
+	}
 
-		public String getData() {
-			return data;
-		}
+	public void setPID(Integer pID) {
+		PID = pID;
+	}
 
-		public void setData(String data) {
-			this.data = data;
-		}
+	public String getLevel() {
+		return level;
+	}
 
-		public Integer getLineNo() {
-			return lineNo;
-		}
+	public void setLevel(String level) {
+		this.level = level;
+	}
 
-		public void setLineNo(Integer lineNo) {
-			this.lineNo = lineNo;
-		}
+	public String getData() {
+		return data;
+	}
 
-		public String getRawData() {
-			return rawData;
-		}
+	public void setData(String data) {
+		this.data = data;
+	}
 
-		public void setRawData(String rawData) {
-			this.rawData = rawData;
-		}
+	public Integer getLineNo() {
+		return lineNo;
+	}
 
-		
-	
-		
-		
+	public void setLineNo(Integer lineNo) {
+		this.lineNo = lineNo;
+	}
+
+	public String getRawData() {
+		return rawData;
+	}
+
+	public void setRawData(String rawData) {
+		this.rawData = rawData;
+	}
+
 }

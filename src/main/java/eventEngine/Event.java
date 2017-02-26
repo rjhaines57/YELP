@@ -6,15 +6,20 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import eventTypes.CompoundChecker;
 import logParser1.Line;
 
 
 
 public class Event {
 
+	private static final Logger logger = Logger.getLogger(Event.class.getName());
+
+	
 	public enum Priority {
 		HIGH,
 		MEDIUM,
@@ -69,7 +74,7 @@ public class Event {
 
 				if (this.eventMetaData.containsKey(field))
 				{
-					// System.out.println("DEBUG2:"+this.eventMetaData.get(field));
+					// logger.log(Level.INFO,"DEBUG2:"+this.eventMetaData.get(field));
 					newDescriptionLine.append(this.eventMetaData.get(field));
 				}
 

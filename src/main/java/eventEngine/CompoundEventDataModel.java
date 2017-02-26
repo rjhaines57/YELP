@@ -45,10 +45,10 @@ public class CompoundEventDataModel {
 	
 	public String eventKey;
 	public class Transitions {
-		public String state;
-		public String event;
-		public String next_state;
-		public Comparison condition;
+		public String state=null;
+		public String event=null;
+		public String next_state=null;
+		public Comparison condition=null;
 		
 		public class Comparison {
 			public String key;

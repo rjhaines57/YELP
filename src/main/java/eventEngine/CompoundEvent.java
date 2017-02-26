@@ -2,10 +2,15 @@ package eventEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
+import eventTypes.CompoundChecker;
 import logParser1.Line;
 
 public class CompoundEvent extends Event {
+	
+	private static final Logger logger = Logger.getLogger(CompoundEvent.class.getName());
+
 
 	ArrayList<Event> events;
 

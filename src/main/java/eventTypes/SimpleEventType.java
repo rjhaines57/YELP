@@ -1,6 +1,7 @@
 package eventTypes;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import eventEngine.Event;
 import eventEngine.SimpleEventInterface;
@@ -8,6 +9,9 @@ import logParser1.Line;
 
 public class SimpleEventType implements SimpleEventInterface {
 
+	private static final Logger logger = Logger.getLogger(SimpleEventType.class.getName());
+
+	
 	private String summary;
 	private String eventName;
 	
@@ -31,7 +35,7 @@ public class SimpleEventType implements SimpleEventInterface {
 	}
 
 	@Override
-	public Event checkLine(Line myLine, ArrayList<Line> buffer) {
+	public ArrayList<Event> checkLine(Line myLine, ArrayList<Line> buffer) {
 		// TODO Auto-generated method stub
 		return null;
 	}
