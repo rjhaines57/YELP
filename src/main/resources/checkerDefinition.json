@@ -52,6 +52,16 @@
 			},
 
 			{
+				"disable": "true",
+				"eventType": "regex",
+				"eventName": "includes",
+				"triggerRegex": " -I",
+				"severity": "info",
+				"summary": "Including file <includes>"
+			},
+
+
+			{
 				"eventType": "regex",
 				"eventName": "cov_emit_executed",
 				"triggerRegex": ".*COMPILING: [^ ]*cov-translate (?<compiler>[^ ]+) ",
