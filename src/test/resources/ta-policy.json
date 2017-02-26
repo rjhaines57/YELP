@@ -69,7 +69,7 @@
 		}, {
 			filter_name : "ccm-too-high",
 			function_filters : [{
-					min_ccm : "20"
+					min_ccm : 15
 				}
 			]
 		},
