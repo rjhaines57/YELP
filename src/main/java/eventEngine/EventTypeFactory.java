@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -80,11 +81,11 @@ public class EventTypeFactory {
 		}
 	}
 
-	public void generateCheckers(File path) {
+	public void generateCheckers(String checkerFileName) {
 
 		try {
 			BufferedReader br = new BufferedReader(
-					new InputStreamReader(new FileInputStream("D:\\Development\\workspace\\logParser1\\src\\main\\resources\\checkerDefinition.json"), StandardCharsets.UTF_8));
+					new InputStreamReader(new FileInputStream(checkerFileName), StandardCharsets.UTF_8));
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.registerTypeAdapter(RegexHelper.class, new RegexHelperDeserializer());
 			gsonBuilder.registerTypeAdapter(Event.Priority.class, new EventPriorityDeserializer());

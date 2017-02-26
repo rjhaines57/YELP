@@ -21,6 +21,16 @@
 			]
 		},
 
+{
+			violation_name : "FN-TOO-COMPLEX",
+			aggregation_granularity : "function",
+			minimum_line_coverage_pct : 101, // Always fire regardless of coverage 
+			use_filters : [
+				"common-set", // common set of filters
+				"ccm-too-high",
+			]
+		},
+
 		// Uncalled functions
 		{
 			violation_name : "UNTESTED-FN",
@@ -54,6 +64,12 @@
 			filter_name : "untested-function",
 			function_filters : [{
 					is_executed : false
+				}
+			]
+		}, {
+			filter_name : "ccm-too-high",
+			function_filters : [{
+					min_ccm : "20"
 				}
 			]
 		},
