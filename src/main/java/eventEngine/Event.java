@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eventTypes.CompoundChecker;
-import logParser1.Line;
+import logParser.Line;
 
 
 

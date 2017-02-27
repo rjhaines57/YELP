@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 import eventEngine.Event.Priority;
 import eventTypes.CompoundChecker;
 import eventTypes.RegexChecker;
-import logParser1.RegexHelper;
+import logParser.RegexHelper;
 
 public class EventTypeFactory {
 

@@ -29,7 +29,7 @@
   <configuration>
     <archive>
       <manifest>
-        <mainClass>logParser1.LogParser</mainClass>
+        <mainClass>logParser.LogParser</mainClass>
       </manifest>
     </archive>
     <descriptorRefs>

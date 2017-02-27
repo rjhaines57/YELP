@@ -14,8 +14,8 @@ import org.junit.Test;
 import eventEngine.Event;
 import eventEngine.SimpleEventDataModel;
 import eventEngine.TopEventDataModel;
-import logParser1.Line;
-import logParser1.RegexHelper;
+import logParser.Line;
+import logParser.RegexHelper;
 
 public class RegexCheckerTest {
 

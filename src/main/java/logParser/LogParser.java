@@ -1,4 +1,4 @@
-package logParser1;
+package logParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -140,6 +140,33 @@ public class LogParser {
 		
 		
 	}
+	
+	public void outputasHTML()
+	{
+
+		HashMap<String, Event> map = new HashMap<String, Event>();
+		for (Event e : eventList) {
+
+			String eventDigest = e.getEventHash();
+
+			if (eventDigest != null) {
+
+				if (map.containsKey(eventDigest)) {
+					// continue;
+				}
+				map.put(eventDigest, e);
+
+			}
+
+			System.out.println(
+					"Event at line:" + e.getPriority() + ":" + e.getLine().getLineNo() + " :" + e.getDescription());
+
+		}
+
+		
+		
+	}
+	
 	
 	public static void main(String[] args) {
 

@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import eventEngine.Event;
 import eventEngine.SimpleEventInterface;
-import logParser1.Line;
+import logParser.Line;
 
 public class SimpleEventType implements SimpleEventInterface {
 

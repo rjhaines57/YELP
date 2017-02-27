@@ -15,8 +15,8 @@ import eventEngine.SimpleEventDataModel;
 import eventEngine.EventTypeFactory;
 import eventEngine.SimpleEventInterface;
 import eventEngine.Event.Priority;
-import logParser1.Line;
-import logParser1.RegexHelper;
+import logParser.Line;
+import logParser.RegexHelper;
 
 public class RegexChecker implements SimpleEventInterface {
 

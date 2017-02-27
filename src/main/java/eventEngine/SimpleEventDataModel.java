@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import eventEngine.Event.Priority;
-import logParser1.RegexHelper;
+import logParser.RegexHelper;
 
 public class SimpleEventDataModel {
 

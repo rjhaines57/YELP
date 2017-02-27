@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.logging.Logger;
 
 import eventTypes.CompoundChecker;
-import logParser1.Line;
+import logParser.Line;
 
 public class CompoundEvent extends Event {
 	

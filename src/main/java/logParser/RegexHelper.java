@@ -1,4 +1,4 @@
-package logParser1;
+package logParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;

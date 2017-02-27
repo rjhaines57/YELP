@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import logParser.RegexHelper;
+
 /**
  * @author rhaines
  *
@@ -53,7 +55,7 @@ public class RegexHelperTest {
 
 
 	/**
-	 * Test method for {@link logParser1.RegexHelper#matchGroups(java.lang.String)}.
+	 * Test method for {@link logParser.RegexHelper#matchGroups(java.lang.String)}.
 	 */
 	@Test
 	public void testMatchGroups() {
@@ -68,7 +70,7 @@ public class RegexHelperTest {
 	}
 
 	/**
-	 * Test method for {@link logParser1.RegexHelper#getRegex()}.
+	 * Test method for {@link logParser.RegexHelper#getRegex()}.
 	 */
 	@Test
 	public void testGetRegex() {
@@ -78,7 +80,7 @@ public class RegexHelperTest {
 	}
 
 	/**
-	 * Test method for {@link logParser1.RegexHelper#getGroups()}.
+	 * Test method for {@link logParser.RegexHelper#getGroups()}.
 	 */
 	@Test
 	public void testGetGroups() {

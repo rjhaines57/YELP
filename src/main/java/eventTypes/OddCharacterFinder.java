@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import eventEngine.Event;
 import eventEngine.SimpleEventInterface;
 import eventEngine.Event.Priority;
-import logParser1.Line;
+import logParser.Line;
 
 public class OddCharacterFinder implements SimpleEventInterface {
 

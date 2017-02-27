@@ -2,7 +2,7 @@ package eventEngine;
 
 import java.util.ArrayList;
 
-import logParser1.Line;
+import logParser.Line;
 
 public interface SimpleEventInterface extends EventTypeInterface {
 
