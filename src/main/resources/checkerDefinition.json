@@ -11,30 +11,19 @@
 				"description": 
 				[
 					"Emit compilation <type> type <errNo> file <fileName> at line <lineNo>",
-					"Full Capture is:<rawData>"
+					"Look at Full Captured data for more information:",
+					"<capturedLines>"
 				],
-
 				"captureRegexes": 
 				[
 					"line (?<lineNo>[\\d]+):",
 					"(?<type>(error|warning)) #(?<errNo>[0-9]+)",
 					"\"(?<fileName>[^\"]+)\", line (?<lineNo>[\\d]+):"
 				],
-
-				"readBehind": 1,
-				"linesToCapture": 3
+				"readBehind": 2,
+				"linesToCapture": 4
 			},
-
 			{
-				"eventType": "regex",
-				"eventName": "compilation_warning",
-				"triggerRegex": "(?<type>(warning)) #(?<errNo>[0-9]+):",
-				"priority": "MEDIUM",
-				"summary": "Emit compilation <type> type <errNo> "
-			},
-
-			{
-				"disable": "true",
 				"eventType": "regex",
 				"eventName": "Tool version (cov-build)",
 				"triggerRegex": "cov-build (?<version>([0-9.]+)) ",
@@ -72,7 +61,7 @@
 				"eventName": "compile_percent",
 				"triggerRegex": " Emitted [0-9]+ (?<language>.*) compilation units [(](?<percent>[0-9]+)%[)] successfully",
 				"severity": "info",
-				"summary": "Only compiled <percent>% of files for <language>"
+				"summary": "Compiled <percent>% of files for <language>"
 			},
 			{
 				"eventType": "regex",
@@ -147,7 +136,7 @@
 					}
 				],
 				"priority": "high",
-				"summary": "The compiler (cc or c++) was invoked but it doesn't look like there was a corresponding emit"
+				"summary": "The compiler <eventKey> was invoked but it doesn't look like there was a corresponding emit"
 			}
 			,
 			{
@@ -173,7 +162,8 @@
 					}
 					
 				],
-				"summary": "The following language:<keyValue> did not build 100%",
+				"summary": "The following language:<eventKey> did not build 100%",
+				"description" : ["The language <eventKey> did not build 100%.", "<p>Look for compilation errors<p>"],
 				"priority": "high"
 			},
 			

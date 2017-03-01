@@ -1,67 +1,105 @@
 <!DOCTYPE html>
-
-<html xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <title>YELP - Yet anothEr Log Parser</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" type="text/css" media="all"
-	href="src/main/resources/logparser.css" />
+
 <link rel="stylesheet" type="text/css" media="all"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
-
+<link rel="stylesheet" type="text/css" media="all"
+	href="src/main/resources/logparser.css" />
 </head>
 
 <body id='bootstrap-overrides'>
-	<div id="wrapper">
+	<div class="container">
+		<div class="row">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse"
+							data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">Yet anothEr Log Parser</a>
+					</div>
 
-		<div id="filedisplay">
-			<samp th:each="line: ${line}">
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav">
+							<li class="active"><a href="#">Link <span
+									class="sr-only">(current)</span></a></li>
+							<li><a href="#">Link</a></li>
+							<li class="dropdown"><a href="#" class="dropdown-toggle"
+								data-toggle="dropdown" role="button" aria-haspopup="true"
+								aria-expanded="false">Dropdown <span class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Action</a></li>
+									<li><a href="#">Another action</a></li>
+									<li><a href="#">Something else here</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a href="#">Separated link</a></li>
+									<li role="separator" class="divider"></li>
+									<li><a href="#">One more separated link</a></li>
+								</ul></li>
+						</ul>
 
-				<div th:if="${#maps.containsKey(events, __${line.lineNo}__)}">
-					<!--  <div th:object="${events[__${line.lineNo}__]}"> -->
-					<div th:each="event1: ${events[__${line.lineNo}__]}">
-						<a id="12345" th:id="${event1.line.lineNo}">Defect</a> <span
-							class="summary" th:text="${event1.Summary}"> Summary </span>
-						<button type="button" class="btn btn-default btn-xs"
-							data-toggle="modal" data-target="#exampleModal"
-							data-whatever="Description"
-							th:attr="data-whatever=${event1.description}">more info</button>
 
 					</div>
-<span class="lineno" th:text="${line.lineNo}+' :'">lineNo</span><span
-					th:text="${line.rawData}">lineContents</span>
+					<!-- /.navbar-collapse -->
 				</div>
-			</samp>
+				<!-- /.container-fluid -->
+			</nav>
 		</div>
+		<div class="row">
+			<div class="col-md-9" role="main">
+				<samp th:each="line: ${line}">
 
-		<div id="rightcolumnwrap">
-			<div id="rightcolumn">
-				<div th:each="event: ${events}">
-					<a href="index.html" th:href="'index.html#'+${event.key}"> <span
-						th:text="${event.key}">LineNo</span> 
-						<span th:each="entry: ${event.value}">
-						<span th:text="${entry.Summary}">event name</span>
-					</span>
-					</a>
-
-
-				</div>
+					<div th:if="${#maps.containsKey(events, __${line.lineNo}__)}">
+						
+						<div class="event" th:each="event1: ${events[__${line.lineNo}__]}">
+							<a id="12345" th:id="${event1.line.lineNo}">Defect</a>
+							<span class="summary" th:text="${event1.Summary}"> Summary </span>
+							<button type="button" class="btn btn-default btn-xs"
+								data-toggle="modal" data-target="#exampleModal"
+								data-whatever="Description" data-preformatted="Capture"
+								th:attr="data-whatever=${event1.description} ,data-preformatted=${event1.eventMetaData['rawData']}">more info</button>
+						</div>
+					</div>
+					<div>
+						<span class="lineno" th:text="${line.lineNo}+' :'">lineNo</span>
+						<span th:text="${line.rawData}">lineContents</span>
+					</div>
+				</samp>
 			</div>
 
+			<div class="col-md-3" role="complimentary">
+
+				<div class="nav nav-pills nav-stacked" data-spy="affix"
+					data-offset-top="205">
+					<nav class="hidden-print hidden-sm hidden-xs affix">
+						<ul class="nav lp-sidenav">
+
+							<li th:each="event: ${events}">
+
+								<div th:each="entry: ${event.value}">
+									<a href="index.html" th:href="'index.html#'+${event.key}"
+										th:text="${entry.getEventType.eventName}">event name</a>
+								</div>
+							</li>
+				</div>
+				</ul>
+				</nav>
+			</div>
 		</div>
 	</div>
-
-
-
-
-
-	<button type="button" class="btn btn-primary" data-toggle="modal"
-		data-target="#exampleModal" data-whatever="@fat">Open modal
-		for @fat</button>
-	<button type="button" class="btn btn-primary" data-toggle="modal"
-		data-target="#exampleModal" data-whatever="@getbootstrap">Open
-		modal for @getbootstrap</button>
+	</div>
 
 
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -77,12 +115,11 @@
 				</div>
 				<div class="modal-body">
 					<div class="modal-text"></div>
-
+					<pre class="modal-preformatted"> </pre>
 
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Send message</button>
 				</div>
 			</div>
 		</div>
@@ -98,12 +135,12 @@
 	$('#exampleModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
   var recipient = button.data('whatever') // Extract info from data-* attributes
+  var preformatted = button.data('preformatted')
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
   var modal = $(this)
-  console.log("Heelo World!")
-  modal.find('.modal-text').text(recipient)
-  
+   modal.find('.modal-text').text(recipient)
+  modal.find('.modal-preformatted').text(preformatted)
 })
 	</script>
 

@@ -119,7 +119,7 @@ public class CompoundChecker implements EventTypeInterface {
 			if (currentState.get(keyValue).contentEquals("display")) {
 				
 				HashMap<String, String> map = new HashMap<String, String>();
-				map.put("keyValue", keyValue);
+				map.put("eventKey", keyValue);
 				CompoundEvent newEvent = new CompoundEvent(eventList.get(keyValue).get(0).getLine(), this, this.config.priority,eventList.get(keyValue));
 				newEvent.setEventMetaData(map);
 				newEvents.add(newEvent);

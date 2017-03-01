@@ -64,6 +64,10 @@ public class LineParser {
 			
 			if (elements.length>3 && elements[3]!=null)
 				myLine.setLevel(elements[3]);
+
+			if (elements.length>4 && elements[4]!=null)
+				myLine.setData(elements[4]);
+			
 			return myLine;
 		}
 		

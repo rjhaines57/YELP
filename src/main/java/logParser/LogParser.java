@@ -107,16 +107,16 @@ public class LogParser {
 				}
 
 				if (!newSimpleEvents.isEmpty()) {
-					
+
 					eventList.addAll(newSimpleEvents);
 					if (eventMap.containsKey(myLine.getLineNo())) {
 						eventMap.get(myLine.getLineNo()).addAll(newSimpleEvents);
 					} else {
-						ArrayList<Event> tmp4=new ArrayList<Event>();
+						ArrayList<Event> tmp4 = new ArrayList<Event>();
 						tmp4.addAll(newSimpleEvents);
 						eventMap.put(myLine.getLineNo(), tmp4);
 					}
-
+					
 					for (Event event : newSimpleEvents) {
 
 						for (EventTypeInterface eventType : eventTypeMap.values()) {
@@ -125,7 +125,7 @@ public class LogParser {
 								if (eventMap.containsKey(myLine.getLineNo())) {
 									eventMap.get(myLine.getLineNo()).addAll(returnedComplexEvents);
 								} else {
-									ArrayList<Event> tmp4=new ArrayList<Event>();
+									ArrayList<Event> tmp4 = new ArrayList<Event>();
 									tmp4.addAll(returnedComplexEvents);
 									eventMap.put(myLine.getLineNo(), tmp4);
 								}
@@ -133,6 +133,7 @@ public class LogParser {
 							}
 						}
 					}
+					
 				}
 
 				lineNo += 1;
@@ -151,12 +152,11 @@ public class LogParser {
 			lineBuffer.add(endofFileLine);
 			for (EventTypeInterface eventType : eventTypeMap.values()) {
 				List<Event> newEndEvents = eventType.processState(endOfFileEvent);
-				if (newEndEvents != null)
-				{
+				if (newEndEvents != null) {
 					if (eventMap.containsKey(endofFileLine.getLineNo())) {
 						eventMap.get(endofFileLine.getLineNo()).addAll(newEndEvents);
 					} else {
-						ArrayList<Event> tmp4=new ArrayList<Event>();
+						ArrayList<Event> tmp4 = new ArrayList<Event>();
 						tmp4.addAll(newEndEvents);
 						eventMap.put(endofFileLine.getLineNo(), tmp4);
 					}

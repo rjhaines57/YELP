@@ -2,6 +2,7 @@ package eventEngine;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import eventTypes.CompoundChecker;
@@ -23,7 +24,7 @@ public class CompoundEvent extends Event {
 
 	public ArrayList<String> getDescription() {
 
-		ArrayList<String> descriptionTemplate;
+		List<String> descriptionTemplate;
 		if (this.description != null) {
 			descriptionTemplate = this.description;
 		} else if (this.eventType.getDescription() != null) {
@@ -40,7 +41,6 @@ public class CompoundEvent extends Event {
 
 		}
 		ArrayList<String> returnStrings=new ArrayList<String>();	
-		returnStrings.add("HELLO!! THIS IS A CompoundEvent");
 		returnStrings.addAll(fillOutTemplate(descriptionTemplate));
 		
 		for (Event event:events)
