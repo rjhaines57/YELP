@@ -5,12 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import eventEngine.CompoundEvent;
 import eventEngine.Event;
-import eventEngine.SimpleEventInterface;
+import eventEngine.EventTypeInterface;
 import eventEngine.Event.Priority;
 import logParser.Line;
 
-public class OddCharacterFinder implements SimpleEventInterface {
+public class OddCharacterFinder implements EventTypeInterface {
 
 	private static final Logger logger = Logger.getLogger(OddCharacterFinder.class.getName());
 
@@ -69,6 +70,12 @@ public class OddCharacterFinder implements SimpleEventInterface {
 	public String getEventName() {
 		// TODO Auto-generated method stub
 		return "odd_character_finder";
+	}
+
+	@Override
+	public ArrayList<Event> processState(Event event) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 	
 }

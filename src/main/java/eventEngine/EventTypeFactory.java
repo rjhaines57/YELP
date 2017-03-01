@@ -33,18 +33,15 @@ public class EventTypeFactory {
 
 	private static final Logger logger = Logger.getLogger(EventTypeFactory.class.getName());
 
-	ArrayList<SimpleEventInterface> eventList;
-	ArrayList<CompoundEventInterface> checkerList;
-
+	HashMap<String,EventTypeInterface> eventTypeMap;
+	
 	public EventTypeFactory() {
-		eventList = new ArrayList<SimpleEventInterface>();
-		checkerList = new ArrayList<CompoundEventInterface>();
+		
 	}
 
-	public EventTypeFactory(ArrayList<SimpleEventInterface> eventList,
-			ArrayList<CompoundEventInterface> checkerList) {
-		this.eventList = eventList;
-		this.checkerList = checkerList;
+	public EventTypeFactory(HashMap<String,EventTypeInterface> eventTypeMap) {
+		this.eventTypeMap = eventTypeMap;
+		
 	}
 
 	static private class RegexHelperDeserializer implements JsonDeserializer<RegexHelper> {
@@ -111,20 +108,20 @@ public class EventTypeFactory {
 
 				if (config.eventType != null && config.eventType.contentEquals("regex")) {
 					logger.log(Level.INFO,"Added checker:" + config.eventName);
-					eventList.add(new RegexChecker(config));
+					eventTypeMap.put(config.eventName,new RegexChecker(config));
 				}
 
 			}
 
 			for (CompoundEventDataModel config : model.checkers) {
-				config.validateEvents(eventList);
+				config.validateEvents(eventTypeMap);
 
 				if (config.disable != null && config.disable.contentEquals("true")) {
 					continue;
 				}
 
 				logger.log(Level.INFO, "Added checker:" + config.checkerName);
-				checkerList.add(new CompoundChecker(config));
+				eventTypeMap.put(config.checkerName,new CompoundChecker(config));
 			}
 
 		} catch (IOException e) {
@@ -132,14 +129,6 @@ public class EventTypeFactory {
 
 		}
 
-	}
-
-	public ArrayList<SimpleEventInterface> getEventList() {
-		return eventList;
-	}
-
-	public ArrayList<CompoundEventInterface> getCheckerList() {
-		return checkerList;
 	}
 
 }

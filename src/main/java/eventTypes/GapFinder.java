@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
+import eventEngine.CompoundEvent;
 import eventEngine.Event;
 import eventEngine.SimpleEventInterface;
 import eventEngine.Event.Priority;
+import eventEngine.EventTypeInterface;
 import logParser.Line;
 
-public class GapFinder implements SimpleEventInterface {
+public class GapFinder implements EventTypeInterface {
 
 	private static final Logger logger = Logger.getLogger(GapFinder.class.getName());
 
@@ -72,6 +74,12 @@ public class GapFinder implements SimpleEventInterface {
 	public String getEventName() {
 		// TODO Auto-generated method stub
 		return "gap_finder";
+	}
+
+	@Override
+	public ArrayList<Event> processState(Event event) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

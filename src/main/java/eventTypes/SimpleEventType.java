@@ -3,11 +3,12 @@ package eventTypes;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import eventEngine.CompoundEvent;
 import eventEngine.Event;
-import eventEngine.SimpleEventInterface;
+import eventEngine.EventTypeInterface;
 import logParser.Line;
 
-public class SimpleEventType implements SimpleEventInterface {
+public class SimpleEventType implements EventTypeInterface {
 
 	private static final Logger logger = Logger.getLogger(SimpleEventType.class.getName());
 
@@ -50,6 +51,12 @@ public class SimpleEventType implements SimpleEventInterface {
 	{
 		this.eventName=eventName;
 		
+	}
+
+	@Override
+	public ArrayList<Event> processState(Event event) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

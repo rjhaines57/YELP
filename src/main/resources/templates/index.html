@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>YELP - Yet anothEr Log Parser</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="src/main/resources/logparser.css" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+</head>
+
+<body id='bootstrap-overrides'>
+	<div id="wrapper">
+
+		<div id="filedisplay">
+			<samp th:each="line: ${line}">
+
+				<div th:if="${#maps.containsKey(events, __${line.lineNo}__)}">
+					<!--  <div th:object="${events[__${line.lineNo}__]}"> -->
+					<div th:each="event1: ${events[__${line.lineNo}__]}">
+						<a id="12345" th:id="${event1.line.lineNo}">Defect</a> <span
+							class="summary" th:text="${event1.Summary}"> Summary </span>
+						<button type="button" class="btn btn-default btn-xs"
+							data-toggle="modal" data-target="#exampleModal"
+							data-whatever="Description"
+							th:attr="data-whatever=${event1.description}">more info</button>
+
+					</div>
+<span class="lineno" th:text="${line.lineNo}+' :'">lineNo</span><span
+					th:text="${line.rawData}">lineContents</span>
+				</div>
+			</samp>
+		</div>
+
+		<div id="rightcolumnwrap">
+			<div id="rightcolumn">
+				<div th:each="event: ${events}">
+					<a href="index.html" th:href="'index.html#'+${event.key}"> <span
+						th:text="${event.key}">LineNo</span> 
+						<span th:each="entry: ${event.value}">
+						<span th:text="${entry.Summary}">event name</span>
+					</span>
+					</a>
+
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+
+	<button type="button" class="btn btn-primary" data-toggle="modal"
+		data-target="#exampleModal" data-whatever="@fat">Open modal
+		for @fat</button>
+	<button type="button" class="btn btn-primary" data-toggle="modal"
+		data-target="#exampleModal" data-whatever="@getbootstrap">Open
+		modal for @getbootstrap</button>
+
+
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="exampleModalLabel">New message</h4>
+				</div>
+				<div class="modal-body">
+					<div class="modal-text"></div>
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Send message</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+	$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  console.log("Heelo World!")
+  modal.find('.modal-text').text(recipient)
+  
+})
+	</script>
+
+
+</body>
+</html>

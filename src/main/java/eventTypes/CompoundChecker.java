@@ -6,13 +6,14 @@ import java.util.logging.Logger;
 
 import eventEngine.CompoundEvent;
 import eventEngine.CompoundEventDataModel;
-import eventEngine.CompoundEventInterface;
+import eventEngine.EventTypeInterface;
 import eventEngine.Event;
+import logParser.Line;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CompoundChecker implements CompoundEventInterface {
+public class CompoundChecker implements EventTypeInterface {
 
 	private static final Logger logger = Logger.getLogger(CompoundChecker.class.getName());
 
@@ -67,9 +68,9 @@ public class CompoundChecker implements CompoundEventInterface {
 			
 	}
 
-	public ArrayList<CompoundEvent> processState(Event event) {
+	public ArrayList<Event> processState(Event event) {
 
-		ArrayList<CompoundEvent> newEvents=new ArrayList<CompoundEvent>();
+		ArrayList<Event> newEvents=new ArrayList<Event>();
 		logger.log(Level.FINEST, "Process Event: " + event.getEventType().getEventName());
 
 		ArrayList<String> keyValues = new ArrayList<String>();
@@ -149,6 +150,12 @@ public class CompoundChecker implements CompoundEventInterface {
 	public String getEventName() {
 		// TODO Auto-generated method stub
 		return config.checkerName;
+	}
+
+	@Override
+	public ArrayList<Event> checkLine(Line myLine, ArrayList<Line> buffer) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

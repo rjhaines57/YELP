@@ -60,12 +60,13 @@
   <artifactId>commons-lang3</artifactId>
   <version>3.5</version>
 </dependency>
-<!-- https://mvnrepository.com/artifact/com.j2html/j2html -->
+<!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
 <dependency>
-    <groupId>com.j2html</groupId>
-    <artifactId>j2html</artifactId>
-    <version>0.7</version>
+    <groupId>org.thymeleaf</groupId>
+    <artifactId>thymeleaf</artifactId>
+    <version>3.0.3.RELEASE</version>
 </dependency>
+
     <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>

@@ -60,13 +60,13 @@ public class CompoundEventDataModel {
 		
 	}
 
-	public boolean validateEvents(ArrayList<SimpleEventInterface> eventList)
+	public boolean validateEvents(HashMap<String,EventTypeInterface> eventType)
 	{
 		boolean allOk=true;
 		for (Transitions transition:transitions)
 		{
 			boolean found=false;
-			for (EventTypeInterface event:eventList)
+			for (EventTypeInterface event:eventType.values())
 			{
 				if (event.getEventName().contentEquals(transition.event))
 				{

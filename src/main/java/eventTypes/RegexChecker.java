@@ -10,15 +10,17 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import eventEngine.CompoundEvent;
 import eventEngine.Event;
 import eventEngine.SimpleEventDataModel;
 import eventEngine.EventTypeFactory;
+import eventEngine.EventTypeInterface;
 import eventEngine.SimpleEventInterface;
 import eventEngine.Event.Priority;
 import logParser.Line;
 import logParser.RegexHelper;
 
-public class RegexChecker implements SimpleEventInterface {
+public class RegexChecker implements EventTypeInterface {
 
 	private static final Logger logger = Logger.getLogger(EventTypeFactory.class.getName());
 
@@ -157,6 +159,12 @@ public class RegexChecker implements SimpleEventInterface {
 	public String getEventName() {
 		// TODO Auto-generated method stub
 		return config.eventName;
+	}
+
+	@Override
+	public ArrayList<Event> processState(Event event) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

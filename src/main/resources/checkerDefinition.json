@@ -50,23 +50,12 @@
 				"severity": "info",
 				"summary": "cov-build arguments: <arguments>"
 			},
-
-			{
-				"disable": "true",
-				"eventType": "regex",
-				"eventName": "includes",
-				"triggerRegex": " -I",
-				"severity": "info",
-				"summary": "Including file <includes>"
-			},
-
-
 			{
 				"eventType": "regex",
 				"eventName": "cov_emit_executed",
 				"triggerRegex": ".*COMPILING: [^ ]*cov-translate (?<compiler>[^ ]+) ",
 				"severity": "info",
-				"summary": "cov-translate executed with compiler [<compiler>] [<triggerText>"
+				"summary": "cov-translate executed with compiler [<compiler>]"
 			},
 
 			{
@@ -74,7 +63,6 @@
 				"eventType": "regex",
 				"eventName": "100_percent",
 				"triggerRegex": "Emitted [0-9]+ (?<language>.*) compilation units [(]100%[)] successfully",
-				"triggerRegex1": "Emitted [0-9]+ (?<language>[^ ]+) compilation units (100%) successfully  ",
 				"severity": "info",
 				"summary": "compile 100% of files for <language>"
 			},
@@ -83,7 +71,6 @@
 				"eventType": "regex",
 				"eventName": "compile_percent",
 				"triggerRegex": " Emitted [0-9]+ (?<language>.*) compilation units [(](?<percent>[0-9]+)%[)] successfully",
-				"triggerRegex1": "Emitted [0-9]+ (?<language>[^ ]+) compilation units (100%) successfully  ",
 				"severity": "info",
 				"summary": "Only compiled <percent>% of files for <language>"
 			},
@@ -93,7 +80,7 @@
 				"triggerRegex": "EXECUTING: (?<compiler>[^ ]*(gcc|g[+][+]|cc|c[+][+]|cxx|cl6x|iccarm)) .*",
 				"excludeRegex": "cc1plus",
 				"severity": "info",
-				"summary": "native compiler executed Compiler:[<compiler>] [<triggerText>]"
+				"summary": "native compiler executed Compiler:[<compiler>]"
 			},
 		
 			{

@@ -1,18 +1,30 @@
 package logParser;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.SortedMap;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
+
 import eventEngine.CompoundEventInterface;
 import eventEngine.Event;
+import eventEngine.CompoundEvent;
 import eventEngine.EventTypeFactory;
 import eventEngine.EventTypeInterface;
 import eventEngine.SimpleEventInterface;
@@ -26,45 +38,55 @@ public class LogParser {
 	private final static Logger logger = Logger.getLogger(LogParser.class.getName());
 
 	ArrayList<Event> eventList;
-	ArrayList<SimpleEventInterface> simpleEventTypes;
-	ArrayList<CompoundEventInterface> compoundEventTypes;
-	
+	SortedMap<Integer, ArrayList<Event>> eventMap;
+	HashMap<String, EventTypeInterface> eventTypeMap;
+	ArrayList<Line> lineBuffer;
+
 	public void setupEventTypes() {
 
-		simpleEventTypes = new ArrayList<SimpleEventInterface>();
-		compoundEventTypes = new ArrayList<CompoundEventInterface>();
-
+		lineBuffer = new ArrayList<Line>();
+		eventTypeMap = new HashMap<String, EventTypeInterface>();
+		eventMap = new TreeMap<Integer, ArrayList<Event>>();
+		eventList = new ArrayList<Event>();
 		// Builtin types
-		simpleEventTypes.add(new GapFinder());
-		simpleEventTypes.add(new OddCharacterFinder());
+		GapFinder gapFinder = new GapFinder();
+		OddCharacterFinder charFinder = new OddCharacterFinder();
 
+		eventTypeMap.put(gapFinder.getEventName(), gapFinder);
+		eventTypeMap.put(charFinder.getEventName(), charFinder);
+
+		SimpleEventType endOfFile = new SimpleEventType("End of file reached", "end_of_file");
+		SimpleEventType startOfFile = new SimpleEventType("Start of Analysis", "start_of_file");
+		eventTypeMap.put("end_of_file", endOfFile);
+		eventTypeMap.put("start_of_file", startOfFile);
 		// Get other types from ConfigFile
-		EventTypeFactory factory = new EventTypeFactory(simpleEventTypes, compoundEventTypes);
+		EventTypeFactory factory = new EventTypeFactory(eventTypeMap);
 
-		String checkerFileName="src\\main\\resources\\checkerDefinition.json";
+		String checkerFileName = "src\\main\\resources\\checkerDefinition.json";
 
-		
 		factory.generateCheckers(checkerFileName);
 
 	}
 
 	public void parseLogFile(Path logFile) {
 
-		eventList=new ArrayList<Event>();
 		Charset charset = Charset.forName("UTF-8");
 
 		LineParser parser = new LineParser();
+		ArrayList<Event> otherEventList = new ArrayList<>();
 
-		SimpleEventType endOfFile = new SimpleEventType("End of file reached", "end_of_file");
-		SimpleEventType startOfFile = new SimpleEventType("Start of Analysis", "start_of_file");
+		Line startLine = new Line();
+		startLine.setLineNo(0);
+		startLine.setRawData("Start of file");
+		Event startOfFileEvent = new Event(startLine, eventTypeMap.get("start_of_file"), Event.Priority.INFO);
+		eventList.add(startOfFileEvent);
+		ArrayList<Event> tmp = new ArrayList<Event>();
+		tmp.add(startOfFileEvent);
+		eventMap.put(startLine.getLineNo(), tmp);
+		lineBuffer.add(startLine);
 
-		
-		ArrayList<Line> lineBuffer = new ArrayList<Line>();
-		
-		
-		Event startOfFileEvent = new Event(new Line(), startOfFile, Event.Priority.INFO);
-		for (CompoundEventInterface checker : compoundEventTypes) {
-			checker.processState(startOfFileEvent);
+		for (EventTypeInterface eventType : eventTypeMap.values()) {
+			eventType.processState(startOfFileEvent);
 		}
 
 		Integer lineNo = 1;
@@ -74,22 +96,41 @@ public class LogParser {
 
 				Line myLine = parser.parseLine(lineNo, line);
 				lineBuffer.add(myLine);
-				if (lineBuffer.size() > 100)
-					lineBuffer.remove(0);
+				// if (lineBuffer.size() > 100)
+				// lineBuffer.remove(0);
 
-				for (SimpleEventInterface eventType : simpleEventTypes) {
+				ArrayList<Event> newSimpleEvents = new ArrayList<>();
+				for (EventTypeInterface eventType : eventTypeMap.values()) {
+					List<Event> returnedSimpleEvents = eventType.checkLine(myLine, lineBuffer);
+					if (returnedSimpleEvents != null)
+						newSimpleEvents.addAll(returnedSimpleEvents);
+				}
 
-					ArrayList<Event> newEvents = eventType.checkLine(myLine, lineBuffer);
+				if (!newSimpleEvents.isEmpty()) {
+					
+					eventList.addAll(newSimpleEvents);
+					if (eventMap.containsKey(myLine.getLineNo())) {
+						eventMap.get(myLine.getLineNo()).addAll(newSimpleEvents);
+					} else {
+						ArrayList<Event> tmp4=new ArrayList<Event>();
+						tmp4.addAll(newSimpleEvents);
+						eventMap.put(myLine.getLineNo(), tmp4);
+					}
 
-					if (newEvents != null) {
-						for (Event event : newEvents) {
-							eventList.add(event);
-							for (CompoundEventInterface checker : compoundEventTypes) {
+					for (Event event : newSimpleEvents) {
 
-								eventList.addAll(checker.processState(event));
-
+						for (EventTypeInterface eventType : eventTypeMap.values()) {
+							ArrayList<Event> returnedComplexEvents = eventType.processState(event);
+							if (returnedComplexEvents != null) {
+								if (eventMap.containsKey(myLine.getLineNo())) {
+									eventMap.get(myLine.getLineNo()).addAll(returnedComplexEvents);
+								} else {
+									ArrayList<Event> tmp4=new ArrayList<Event>();
+									tmp4.addAll(returnedComplexEvents);
+									eventMap.put(myLine.getLineNo(), tmp4);
+								}
+								eventList.addAll(returnedComplexEvents);
 							}
-
 						}
 					}
 				}
@@ -99,24 +140,40 @@ public class LogParser {
 			}
 
 			// Send end of File Event
-			Event endOfFileEvent = new Event(new Line(), endOfFile, Event.Priority.INFO);
+			Line endofFileLine = new Line();
+			endofFileLine.setRawData("End of File");
+			endofFileLine.setLineNo(lineNo);
+			Event endOfFileEvent = new Event(endofFileLine, eventTypeMap.get("end_of_file"), Event.Priority.INFO);
 			eventList.add(endOfFileEvent);
-			for (CompoundEventInterface checker : compoundEventTypes) {
-				
-				eventList.addAll(checker.processState(endOfFileEvent));
-				
+			ArrayList<Event> tmp2 = new ArrayList<Event>();
+			tmp2.add(endOfFileEvent);
+			eventMap.put(endofFileLine.getLineNo(), tmp2);
+			lineBuffer.add(endofFileLine);
+			for (EventTypeInterface eventType : eventTypeMap.values()) {
+				List<Event> newEndEvents = eventType.processState(endOfFileEvent);
+				if (newEndEvents != null)
+				{
+					if (eventMap.containsKey(endofFileLine.getLineNo())) {
+						eventMap.get(endofFileLine.getLineNo()).addAll(newEndEvents);
+					} else {
+						ArrayList<Event> tmp4=new ArrayList<Event>();
+						tmp4.addAll(newEndEvents);
+						eventMap.put(endofFileLine.getLineNo(), tmp4);
+					}
+					eventList.addAll(newEndEvents);
+				}
+
 			}
 
-		} catch (IOException x) {
+		} catch (
+
+		IOException x) {
 			System.err.format("IOException: %s%n", x);
 		}
 
-	
-
 	}
 
-	public void displayEvents()
-	{
+	public void displayEvents() {
 
 		HashMap<String, Event> map = new HashMap<String, Event>();
 		for (Event e : eventList) {
@@ -137,37 +194,65 @@ public class LogParser {
 
 		}
 
-		
-		
 	}
-	
-	public void outputasHTML()
-	{
 
-		HashMap<String, Event> map = new HashMap<String, Event>();
-		for (Event e : eventList) {
+	private TemplateEngine templateEngine;
 
-			String eventDigest = e.getEventHash();
+	private void initialiseTemplateEngine() {
+		templateEngine = new TemplateEngine();
+		FileTemplateResolver fileTemplateResolver = new FileTemplateResolver();
+		fileTemplateResolver.setPrefix("src/main/resources/templates/");
+		fileTemplateResolver.setSuffix(".html");
+		fileTemplateResolver.setTemplateMode("HTML5");
+		templateEngine.setTemplateResolver(fileTemplateResolver);
 
-			if (eventDigest != null) {
+	}
 
-				if (map.containsKey(eventDigest)) {
-					// continue;
-				}
-				map.put(eventDigest, e);
+	public void outputasHTML() {
+		BufferedWriter writer = null;
 
+		try {
+			OutputStreamWriter char_output = new OutputStreamWriter(new FileOutputStream("index.html"),
+					Charset.forName("UTF-8").newEncoder());
+
+			// writer = new BufferedWriter(new
+			// FileWriter("index.html",Charset.forName("UTF-8").newEncoder()));
+			initialiseTemplateEngine();
+			Context context = new Context();
+			context.setVariable("events", eventMap);
+			context.setVariable("line", lineBuffer.subList(lineBuffer.size() - 500, lineBuffer.size()));
+			templateEngine.process("index", context, char_output);
+
+		} catch (IOException e) {
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (IOException e) {
 			}
-
-			System.out.println(
-					"Event at line:" + e.getPriority() + ":" + e.getLine().getLineNo() + " :" + e.getDescription());
-
 		}
 
-		
-		
 	}
-	
-	
+
+	/*
+	 * HashMap<String, Event> map = new HashMap<String, Event>(); for (Event e :
+	 * eventList) {
+	 * 
+	 * String eventDigest = e.getEventHash();
+	 * 
+	 * if (eventDigest != null) {
+	 * 
+	 * if (map.containsKey(eventDigest)) { // continue; } map.put(eventDigest,
+	 * e);
+	 * 
+	 * }
+	 * 
+	 * System.out.println( "Event at line:" + e.getPriority() + ":" +
+	 * e.getLine().getLineNo() + " :" + e.getDescription());
+	 * 
+	 * }
+	 */
+
 	public static void main(String[] args) {
 
 		logger.log(Level.WARNING, "Testing info level");
@@ -176,12 +261,14 @@ public class LogParser {
 				"build-log-many-names-gcc.txt");
 
 		LogParser instance = new LogParser();
-		
+
 		instance.setupEventTypes();
-		
+
 		instance.parseLogFile(logFile);
-		
+
 		instance.displayEvents();
+
+		instance.outputasHTML();
 		// TODO Auto-generated method stub
 		// Path
 		// file=FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents",
