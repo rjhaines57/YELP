@@ -3,11 +3,10 @@ package logParser;
 import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
-import eventTypes.CompoundChecker;
 
 public class Line {
 
-	private static final Logger logger = Logger.getLogger(CompoundChecker.class.getName());
+	private static final Logger logger = Logger.getLogger(Line.class.getName());
 
 	private String rawData;
 	private Integer lineNo;
