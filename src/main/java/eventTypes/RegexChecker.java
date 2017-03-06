@@ -155,7 +155,10 @@ public class RegexChecker implements EventTypeInterface {
 
 	@Override
 	public String getSummary() {
-		return config.summary;
+		return null;
+		
+		//
+		//return config.summary;
 	}
 
 	@Override
