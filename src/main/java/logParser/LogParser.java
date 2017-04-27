@@ -22,6 +22,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 
+import com.google.gson.Gson;
+
 import eventEngine.CompoundEventInterface;
 import eventEngine.Event;
 import eventEngine.CompoundEvent;
@@ -73,7 +75,7 @@ public class LogParser {
 		Charset charset = Charset.forName("UTF-8");
 
 		LineParser parser = new LineParser();
-		ArrayList<Event> otherEventList = new ArrayList<>();
+		List<Event> otherEventList = new ArrayList<>();
 
 		Line startLine = new Line();
 		startLine.setLineNo(0);
@@ -88,17 +90,21 @@ public class LogParser {
 		for (EventTypeInterface eventType : eventTypeMap.values()) {
 			eventType.processState(startOfFileEvent);
 		}
-
+		Integer logCount=1;
 		Integer lineNo = 1;
 		try (BufferedReader reader = Files.newBufferedReader(logFile, charset)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 
+				
+			
 				Line myLine = parser.parseLine(lineNo, line);
 				lineBuffer.add(myLine);
-				// if (lineBuffer.size() > 100)
-				// lineBuffer.remove(0);
+				
+				if (lineBuffer.size() > 100000)
+				lineBuffer.remove(0);
 
+				
 				ArrayList<Event> newSimpleEvents = new ArrayList<>();
 				for (EventTypeInterface eventType : eventTypeMap.values()) {
 					List<Event> returnedSimpleEvents = eventType.checkLine(myLine, lineBuffer);
@@ -116,6 +122,7 @@ public class LogParser {
 						tmp4.addAll(newSimpleEvents);
 						eventMap.put(myLine.getLineNo(), tmp4);
 					}
+				
 					
 					for (Event event : newSimpleEvents) {
 
@@ -132,10 +139,18 @@ public class LogParser {
 								eventList.addAll(returnedComplexEvents);
 							}
 						}
-					}
+					} 
 					
-				}
+				} 
 
+				
+				logCount=logCount+1;
+				if (logCount % 10000 == 0)
+				{
+					logger.log(Level.INFO, "processing line :"+lineNo+" "+lineBuffer.size());
+					logCount=1;
+				}
+				
 				lineNo += 1;
 				// System.out.println(line);
 			}
@@ -219,7 +234,7 @@ public class LogParser {
 			// FileWriter("index.html",Charset.forName("UTF-8").newEncoder()));
 			initialiseTemplateEngine();
 			Context context = new Context();
-			context.setVariable("events", eventMap);
+			context.setVariable("events", eventMap.subMap(eventMap.lastKey()-500,eventMap.lastKey()));
 			context.setVariable("line", lineBuffer.subList(lineBuffer.size() - 500, lineBuffer.size()));
 			templateEngine.process("index", context, char_output);
 
@@ -258,8 +273,12 @@ public class LogParser {
 		logger.log(Level.WARNING, "Testing info level");
 
 		Path logFile = FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents\\build-logs",
-				"build-log-many-names-gcc.txt");
+				"build-log.txt");
 
+	//	Path logFile = FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents\\build-logs",
+	//			 "build-log_kollol.txt");
+
+		
 		LogParser instance = new LogParser();
 
 		instance.setupEventTypes();
@@ -268,15 +287,19 @@ public class LogParser {
 
 		instance.displayEvents();
 
-		instance.outputasHTML();
+		
+		Gson gson=new Gson();
+		String events= gson.toJson(instance.getEventList());
+		System.out.println("JSON:" + events);
+
+		
+	//	instance.outputasHTML();
 		// TODO Auto-generated method stub
 		// Path
 		// file=FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents",
 		// "build-log-zdis.txt");
 		// Path file =
-		// FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents\\build-logs",
-		// "build-log-gcc.txt");
-
+		
 		// Path
 		// file=FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents",
 		// "build-log.txt");
@@ -286,5 +309,13 @@ public class LogParser {
 		// Path
 		// file=FileSystems.getDefault().getPath("C:\\Users\\rhaines\\Documents\\Engagements\\Imagination
 		// Tech", "build-log.txt");
+	}
+
+	public ArrayList<Event> getEventList() {
+		return eventList;
+	}
+
+	public SortedMap<Integer, ArrayList<Event>> getEventMap() {
+		return eventMap;
 	}
 }
