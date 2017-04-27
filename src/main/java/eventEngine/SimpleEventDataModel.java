@@ -10,10 +10,13 @@ public class SimpleEventDataModel {
 
 	private static final Logger logger = Logger.getLogger(SimpleEventDataModel.class.getName());
 	
+	
 	public String disable;
 	public String eventType;
 	public String eventName;
-
+	public String fixPaths;
+	
+	
 	public RegexHelper triggerRegex;
 	public RegexHelper excludeRegex;
 	public Event.Priority priority;

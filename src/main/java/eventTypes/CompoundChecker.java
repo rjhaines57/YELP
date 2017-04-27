@@ -107,7 +107,7 @@ public class CompoundChecker implements EventTypeInterface {
 					if (!checkCondition(keyValue, event, transition))
 						break;
 
-					logger.log(Level.FINE, "Found transition to:[" + transition.next_state + "] with event ["
+					logger.log(Level.FINEST, "Found transition to:[" + transition.next_state + "] with event ["
 							+ event.getEventType().getEventName() + "] for key [" + keyValue + "]");
 
 					currentState.put(keyValue, transition.next_state);

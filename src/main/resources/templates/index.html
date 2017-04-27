@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" type="text/css" media="all"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" media="all"
 	href="src/main/resources/logparser.css" />
 </head>
@@ -40,7 +41,8 @@
 								data-toggle="dropdown" role="button" aria-haspopup="true"
 								aria-expanded="false">Dropdown <span class="caret"></span></a>
 								<ul class="dropdown-menu">
-									<li><a href="#">Action</a></li>
+									<li><a href="#" data-toggle="modal"
+										data-target="#fileupload">uploadfile</a></li>
 									<li><a href="#">Another action</a></li>
 									<li><a href="#">Something else here</a></li>
 									<li role="separator" class="divider"></li>
@@ -59,48 +61,51 @@
 		</div>
 		<div class="row">
 			<div class="col-md-9" role="main">
-				<samp th:each="line: ${line}">
+			    <ul class="list-group">
+				<li class="list-group-item" th:each="file: ${files}">
+							
+							<span th:text="${file.originalFileName}+'  :'+${file.description} ">filename</span>
+						<button class="glyphicon glyphicon-remove" aria-hidden="true"></button>
+				</li>
 
-					<div th:if="${#maps.containsKey(events, __${line.lineNo}__)}">
-						
-						<div class="event" th:each="event1: ${events[__${line.lineNo}__]}">
-							<a id="12345" th:id="${event1.line.lineNo}">Defect</a>
-							<span class="summary" th:text="${event1.Summary}"> Summary </span>
-							<button type="button" class="btn btn-default btn-xs"
-								data-toggle="modal" data-target="#exampleModal"
-								data-whatever="Description" data-preformatted="Capture"
-								th:attr="data-whatever=${event1.description} ,data-preformatted=${event1.eventMetaData['rawData']}">more info</button>
-						</div>
-					</div>
-					<div>
-						<span class="lineno" th:text="${line.lineNo}+' :'">lineNo</span>
-						<span th:text="${line.rawData}">lineContents</span>
-					</div>
-				</samp>
-			</div>
-
-			<div class="col-md-3" role="complimentary">
-
-				<div class="nav nav-pills nav-stacked" data-spy="affix"
-					data-offset-top="205">
-					<nav class="hidden-print hidden-sm hidden-xs affix">
-						<ul class="nav lp-sidenav">
-
-							<li th:each="event: ${events}">
-
-								<div th:each="entry: ${event.value}">
-									<a href="index.html" th:href="'index.html#'+${event.key}"
-										th:text="${entry.getEventType.eventName}">event name</a>
-								</div>
-							</li>
-				</div>
+				
 				</ul>
-				</nav>
 			</div>
+
+			</div>
+	</div>
+
+
+	<!-- Modal -->
+	<div id="fileupload" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">File Upload</h4>
+				</div>
+				<form role="form" action="/upload" method="post" enctype="multipart/form-data">
+				<div class="modal-body">
+				
+					<div class="form-group">
+					 <label for="filename">File to Upload</label>
+					<input type="file" name="filename" id="filename" />
+					</div>
+					<label for="description">Description</label>
+					<input type="text" name="description"/>
+				</div>
+				
+				<div class="modal-footer">
+				    <button type="submit" value="submit" class="btn btn-default" >Submit</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+				</form>
+			</div>
+
 		</div>
 	</div>
-	</div>
-
 
 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel">

@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -34,6 +35,14 @@ public class EventTypeFactory {
 	private static final Logger logger = Logger.getLogger(EventTypeFactory.class.getName());
 
 	HashMap<String,EventTypeInterface> eventTypeMap;
+	
+	private static boolean stringCompare(String str1, String str2)
+	{
+		  return (str1 == null ? str2 == null : str1.equals(str2));
+	}
+	
+	
+	
 	
 	public EventTypeFactory() {
 		
@@ -78,6 +87,21 @@ public class EventTypeFactory {
 		}
 	}
 
+	private void registerSimpleCheckers(SimpleEventDataModel[] events) {
+	for (SimpleEventDataModel config : events) {
+
+		if (stringCompare(config.disable,"true")) {
+			continue;
+		}
+
+		if (config.eventType != null && config.eventType.contentEquals("regex")) {
+			logger.log(Level.INFO,"Added checker:" + config.eventName);
+			eventTypeMap.put(config.eventName,new RegexChecker(config));
+		}
+
+	}
+}
+	
 	public void generateCheckers(String checkerFileName) {
 
 		try {
@@ -98,21 +122,11 @@ public class EventTypeFactory {
 			TopEventDataModel model = gson.fromJson(br, TopEventDataModel.class);
 			assert(model!=null);
 			
-			
 			br.close();
-			for (SimpleEventDataModel config : model.events) {
-
-				if (config.disable != null && config.disable.contentEquals("true")) {
-					continue;
-				}
-
-				if (config.eventType != null && config.eventType.contentEquals("regex")) {
-					logger.log(Level.INFO,"Added checker:" + config.eventName);
-					eventTypeMap.put(config.eventName,new RegexChecker(config));
-				}
-
-			}
-
+			
+			registerSimpleCheckers(model.events);
+			
+			
 			for (CompoundEventDataModel config : model.checkers) {
 				config.validateEvents(eventTypeMap);
 

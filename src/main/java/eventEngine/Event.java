@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,8 +50,11 @@ public class Event {
 
 	protected List<String> fillOutTemplate(List<String> descriptionTemplate) {
 
+		
 		if (this.eventMetaData == null)
 			return descriptionTemplate;
+		
+		logger.log(Level.INFO,"fillOutTemplate for:"+eventType.getEventName());
 		
 		boolean appendCapturedLines = false;
 		ArrayList<String> newDescription = new ArrayList<String>();
@@ -60,8 +64,22 @@ public class Event {
 			Integer lastStartIndex = 0;
 			StringBuffer newDescriptionLine = new StringBuffer();
 			Pattern match = Pattern.compile("<[\\w]+>");
+			
+			if (match==null)
+			{
+				logger.log(Level.SEVERE,"match is null WTF!:"+descriptionLine);
+				continue;
+			}
+			
+			
 			Matcher regexMatcher = match.matcher(descriptionLine);
 
+			if (regexMatcher==null)
+			{
+				logger.log(Level.WARNING,"regexMatch is null :"+descriptionLine);
+				continue;
+			}
+			
 			while (regexMatcher.find()) {
 				newDescriptionLine.append(descriptionLine.substring(lastStartIndex, regexMatcher.start()));
 				lastStartIndex = regexMatcher.end();

@@ -3,6 +3,7 @@
 		"events": 
 		[
 				{
+			
 				"eventType": "regex",
 				"eventName": "compilation_error",
 				"triggerRegex": "(?<type>(error)) #(?<errNo>[0-9]+):",
@@ -24,6 +25,7 @@
 				"linesToCapture": 4
 			},
 			{
+			
 				"eventType": "regex",
 				"eventName": "Tool version (cov-build)",
 				"triggerRegex": "cov-build (?<version>([0-9.]+)) ",
@@ -32,7 +34,7 @@
 			},
 
 			{
-				"disable": "true",
+		
 				"eventType": "regex",
 				"eventName": "cov-build command",
 				"triggerRegex": "cov-build expanded command:(?<arguments>(.*))",
@@ -40,15 +42,18 @@
 				"summary": "cov-build arguments: <arguments>"
 			},
 			{
+			
 				"eventType": "regex",
 				"eventName": "cov_emit_executed",
-				"triggerRegex": ".*COMPILING: [^ ]*cov-translate (?<compiler>[^ ]+) ",
+				"fixPaths" : "true",
+				"triggerRegex2": ".*COMPILING: [^ ]*(cov-translate|cov-translate.exe) (?<compiler>[^ ]+) ",
+				"triggerRegex": "COMPILING: .*(cov-translate|cov-translate.exe\") (?<compiler>[^ ]+) ",
 				"severity": "info",
 				"summary": "cov-translate executed with compiler [<compiler>]"
 			},
 
 			{
-				"disable": "true",
+				
 				"eventType": "regex",
 				"eventName": "100_percent",
 				"triggerRegex": "Emitted [0-9]+ (?<language>.*) compilation units [(]100%[)] successfully",
@@ -64,12 +69,20 @@
 				"summary": "Compiled <percent>% of files for <language>"
 			},
 			{
+			
 				"eventType": "regex",
+				"fixPaths" : "true",
 				"eventName": "native_compiler_executed",
-				"triggerRegex": "EXECUTING: (?<compiler>[^ ]*(gcc|g[+][+]|cc|c[+][+]|cxx|cl6x|iccarm)) .*",
+				"triggerRegex": "EXECUTING: (?<compiler>[^ ]*(cl|gcc|g[+][+]|cc|c[+][+]|cxx|cl6x|iccarm)([.]exe)?) .*",
 				"excludeRegex": "cc1plus",
 				"severity": "info",
-				"summary": "native compiler executed Compiler:[<compiler>]"
+				"linesToCapture": 1,
+				"captureRegexes": 
+				[
+					"\"(?<fileName>[^\"]+([.]C|[.c]|[.]cpp))\"",
+					" (?<fileName>[^ ]+([.]C|[.]c|[.]cpp)) "
+				],
+				"summary": "native compiler executed Compiler:[<compiler>] file:[<fileName>]"
 			},
 		
 			{

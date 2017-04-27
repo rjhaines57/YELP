@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -40,7 +41,7 @@ public class RegexChecker implements EventTypeInterface {
 	public RegexChecker(SimpleEventDataModel config) {
 		this.moreToCapture = false;
 		this.config = config;
-		this.readAheadCount = 0;
+		this.readAheadCount = 1;
 		rawData = new StringBuffer();
 
 		if (this.config.linesToCapture == null)
@@ -77,6 +78,7 @@ public class RegexChecker implements EventTypeInterface {
 			// System.out.println(line.getLineNo()+":"+line.getRawData());
 		}
 		
+				
 		
 		return map;
 	}
@@ -87,6 +89,7 @@ public class RegexChecker implements EventTypeInterface {
 
 		Matcher triggerMatcher = this.config.triggerRegex.getPattern().matcher(myLine.getRawData());
 
+		
 		if (!this.moreToCapture) {
 			if (triggerMatcher.find()) {
 				this.triggerLine = myLine;
@@ -95,23 +98,26 @@ public class RegexChecker implements EventTypeInterface {
 
 					Matcher excludeMatcher = this.config.excludeRegex.getPattern().matcher(triggerMatcher.group(0));
 					if (excludeMatcher.find()) {
-						logger.log(Level.FINE, "Excluding trigger matched:[" + excludeMatcher.group(0) + "]");
+						logger.log(Level.FINEST, "Excluding trigger matched:[" + excludeMatcher.group(0) + "]");
 						return null;
 					}
 				}
 
 				logger.log(Level.FINE, "CheckerType: [" + this.getEventName() + "] fired:" + this.triggerText + " at line ["+myLine.getLineNo()+"]");
-				if (config.linesToCapture != 0 || config.endCaptureRegex != null) {
+				if (config.linesToCapture > 1 || config.endCaptureRegex != null) {
 					if (!this.moreToCapture) {
 						this.moreToCapture = true;
-						//
+						logger.log(Level.FINEST, "CheckerType: [" + this.getEventName() + "] setting more to capture true"); 
 						return null;
 					}
 				}
 			} else
+			{
+			//logger.log(Level.FINE, "CheckerType: [" + this.getEventName() + "] no match:");
 				return null;
+			}
 		} else {
-			logger.log(Level.FINE, "CheckerType: [" + this.getEventName() + "] looking for more lines readAheadCount:"+this.readAheadCount);
+			logger.log(Level.FINEST, "CheckerType: [" + this.getEventName() + "] looking for more lines readAheadCount:"+this.readAheadCount);
 			Matcher endTriggerMatcher = null;
 			if (this.config.endCaptureRegex != null) {
 				endTriggerMatcher = this.config.endCaptureRegex.getPattern().matcher(myLine.getRawData());
@@ -123,7 +129,7 @@ public class RegexChecker implements EventTypeInterface {
 			// Read the rest of the data
 			if (readAheadCount < (config.linesToCapture - config.readBehind)
 					|| (endTriggerMatcher != null && !endTriggerMatcher.find())) {
-				logger.log(Level.FINE, "CheckerType: [" + this.getEventName() + "] At line ["+myLine.getLineNo()+"] Lines still needed:"+(config.linesToCapture - config.readBehind));
+				logger.log(Level.FINEST, "CheckerType: [" + this.getEventName() + "] At line ["+myLine.getLineNo()+"] Lines still needed:"+(config.linesToCapture - config.readBehind));
 				readAheadCount += 1;
 				return null;
 			}
@@ -131,21 +137,41 @@ public class RegexChecker implements EventTypeInterface {
 
 		this.moreToCapture = false;
 		
-		List<Line> savedBuffer=buffer.subList((buffer.size()-1)-this.readAheadCount-this.config.readBehind,buffer.size()-1);
+		logger.log(Level.FINEST, "CheckerType: [" + this.getEventName() + "] creating event");
+
+		List<Line> savedBuffer=buffer.subList((buffer.size())-this.readAheadCount-this.config.readBehind,buffer.size());
+		logger.log(Level.FINEST, "CheckerType: [" + this.getEventName() + "] buffsize["+buffer.size()+"] readAheadCount["+this.readAheadCount+"] readBehind["+this.config.readBehind+"]");
+		
 		HashMap<String,String> map=captureMetadata(savedBuffer);
 
-		this.readAheadCount = 0;
+		this.readAheadCount = 1;
 
 		
 		Event event = new Event(triggerLine, this, config.priority);
 		event.setEventMetaData(map);
 		map.putAll(config.triggerRegex.matchGroups(this.triggerLine.getRawData()));
 		map.put("triggerText", this.triggerText);
+		
+		if (config.fixPaths != null && config.fixPaths.contentEquals("true")) {
+			
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				    String currentValue = entry.getValue();
+
+				    entry.setValue(currentValue.replace("\\", "/"));
+				}
+				
+				
+			}
+
+		
 		map.put("rawData", this.rawData.toString());
 		event.getCapturedLines().addAll(savedBuffer);
 
+		
+		
 		return new ArrayList<Event>(Arrays.asList(event));
 
+		
 	}
 
 	@Override
@@ -155,10 +181,9 @@ public class RegexChecker implements EventTypeInterface {
 
 	@Override
 	public String getSummary() {
-		return null;
 		
-		//
-		//return config.summary;
+		
+		return config.summary;
 	}
 
 	@Override

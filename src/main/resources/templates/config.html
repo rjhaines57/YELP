@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="logparserConfigApp">
+<head>
+
+<meta charset="ISO-8859-1"></meta>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+<script src="logparserConfigApp.js"></script>
+<link rel="stylesheet" type="text/css" media="all"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<title>Insert title here</title>
+</head>
+<body ng-controller="logparserConfigController">
+	<div class="container">
+
+ 	<span uib-dropdown on-toggle="toggled(open)">
+      <a href id="simple-dropdown" uib-dropdown-toggle>
+        Click me for a dropdown, yo!
+      </a>
+      <ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+        <li ng-repeat="event in config.events">
+          <a ng-click="openModal(event)">{{event.eventName}}</a>
+        </li>
+     </ul>
+ 
+		<div class ="dropdown" on-toggle="toggled(open)">
+			<button class="dropdown-toggle">Toggle ME! 
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				<!--  <li ng-repeat="event in config.events"><a href="#">{{event.eventNane}}</a></li>  -->
+				<li><a ng-click="dropboxitemselected()" href="#">HTML</a></li>
+				<li><a ng-click="dropboxitemselected()" href="#">CSS</a></li>
+				<li><a ng-click="dropboxitemselected()" href="#">JavaScript</a></li>
+
+			</ul>
+		</div>
+	</div>
+	
+	
+	<!-- Modal -->
+	<div id="editSimpleChecker" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">File Upload</h4>
+				</div>
+				<div class="form-group">
+  				<label for="pwd">CheckerName:</label>
+  				<input type="text" class="form-control" id="pwd">
+			  </div>
+			</div>
+
+		</div>
+	</div>
+	
+	<div ng-include src="'modals/editSimpleChecker.htm'"></div>  
+	
+</body>
+</html>
