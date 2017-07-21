@@ -41,10 +41,13 @@ public class LineParser {
 		int dateIndex=0;
 		int processIndex=1;
 		int pidIndex=2;
+		int levelIndex=3;
+		int dataIndex=4;
 		
+		boolean test=true;
 		// Split string into list
 		String[] elements=line.split("\\|");
-		if (elements==null)
+		if (elements==null || test==true)
 			return myLine;
 		
 		if (elements.length > 2)
@@ -70,11 +73,11 @@ public class LineParser {
 			}
 			}
 			
-			if (elements.length>3 && elements[3]!=null)
-				myLine.setLevel(elements[3]);
+			if (elements.length>3 && elements[levelIndex]!=null)
+				myLine.setLevel(elements[levelIndex]);
 
-			if (elements.length>4 && elements[4]!=null)
-				myLine.setData(elements[4]);
+			if (elements.length>4 && elements[dataIndex]!=null)
+				myLine.setData(elements[levelIndex]);
 			
 			return myLine;
 		}
