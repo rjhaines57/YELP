@@ -62,11 +62,11 @@ public class RegexHelperTest {
 		RegexHelper regex=new RegexHelper(regexString);
 		
 		HashMap<String,String> result = regex.matchGroups("test matching 12345 groups text");
-		
+		if (!result.isEmpty()) {
 		assertEquals(result.get("groupa"),"test");
 		assertEquals(result.get("numbers"),"12345");
 		assertEquals(result.get("groupb"),"text");
-				
+		}		
 	}
 
 	/**
