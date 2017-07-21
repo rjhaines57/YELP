@@ -50,7 +50,7 @@ public class RegexHelper {
 				map.put(group, regexMatcher.group(group));
 			}
 		}
-
+		if (map.isEmpty()) { return null; }
 		return map;
 	}
 
