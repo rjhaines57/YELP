@@ -73,12 +73,17 @@ public class LineParser {
 			}
 			}
 			
+
 			if (elements.length>3 && elements[levelIndex]!=null)
+			{
 				myLine.setLevel(elements[levelIndex]);
+			}
 
 			if (elements.length>4 && elements[dataIndex]!=null)
+			{
 				myLine.setData(elements[levelIndex]);
-			
+			}
+				
 			return myLine;
 		}
 		
