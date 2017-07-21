@@ -38,6 +38,10 @@ public class LineParser {
 		myLine.setRawData(line);
 		myLine.setLineNo(currentLine);
 		
+		int dateIndex=0;
+		int processIndex=1;
+		int pidIndex=2;
+		
 		// Split string into list
 		String[] elements=line.split("\\|");
 		if (elements==null)
@@ -47,15 +51,19 @@ public class LineParser {
 		{
 			// Likely to be a "normal" log line, try to fill in the usual stuff
 			// like this: 2016-12-12T11:31:12.121713Z|cov-build|4685|info|> some stuff here
-			if (elements[0]!=null)
-					myLine.setDate(parseDate(elements[0]));
-			if (elements[1]!=null)
-					myLine.setProcessName(elements[1]);
+			if (elements[dateIndex]!=null)
+			{
+					myLine.setDate(parseDate(elements[dateIndex]));
+			}
+			if (elements[processIndex]!=null)
+			{
+					myLine.setProcessName(elements[dateIndex]);
+			}
 			
-			if (elements[2]!=null)
+			if (elements[pidIndex]!=null)
 			{
 			try {
-			myLine.setPID(Integer.parseInt(elements[2]));
+			myLine.setPID(Integer.parseInt(elements[pidIndex]));
 			} catch (NumberFormatException e)
 			{
 			//	logger.log(Level.INFO,"Failed to parse Integer at line "+this.currentLine+" with content:"+elements[2]);

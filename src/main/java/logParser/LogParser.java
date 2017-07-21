@@ -46,11 +46,15 @@ public class LogParser {
 
 	public void setupEventTypes() {
 
+		
+		int temp=0;
 		lineBuffer = new ArrayList<Line>();
 		eventTypeMap = new HashMap<String, EventTypeInterface>();
 		eventMap = new TreeMap<Integer, ArrayList<Event>>();
 		eventList = new ArrayList<Event>();
 		// Builtin types
+		temp=6;
+		
 		GapFinder gapFinder = new GapFinder();
 		OddCharacterFinder charFinder = new OddCharacterFinder();
 
