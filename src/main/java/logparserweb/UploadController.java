@@ -38,9 +38,12 @@ public class UploadController {
 			
 			// Get the file and save it somewhere
 			byte[] bytes = filename.getBytes();
+			String origName=filename.getOriginalFilename();
+			if (origName != null && !origName.contains("../") && !origName.contains("$") && !origName.contains("*"))//Check the path whether it's included risk character
+			{
 			Path path = Paths.get(UPLOADED_FOLDER + filename.getOriginalFilename());
 			Files.write(path, bytes);
-
+			}
 		
 			Long fileId=fileService.createFile(filename.getOriginalFilename(),description);
 			Path newPath = Paths.get(UPLOADED_FOLDER + "log_"+fileId);
