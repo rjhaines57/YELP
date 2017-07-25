@@ -44,10 +44,10 @@ public class LineParser {
 		int levelIndex=3;
 		int dataIndex=4;
 		
-		boolean test1=true;
+		boolean test2=true;
 		// Split string into list
 		String[] elements=line.split("\\|");
-		if (elements==null || test1==true)
+		if (elements==null || test2==true)
 			return myLine;
 		
 		if (elements.length > 2)
