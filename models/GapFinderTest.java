@@ -4,7 +4,7 @@ public class GapFinderTest {
 
 	public void exitTestInBizarreFashion()
 	{
-		killpath();
+		com.coverity.primitives.Coverity.killpath();
 	}
 
     
