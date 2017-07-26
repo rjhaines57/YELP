@@ -8,7 +8,7 @@
        },
        {
           "method_set_for_dc_checker" : "DC.CUSTOM_ROBS_CHECKER",
-          "methods" : { "named" : "getSummary" },
+          "methods" : { "named" : "eventTypes.RegexChecker.getSummary" },
           "txt_defect_message" : "Very bad function. Do not call getSummary again!",
           "txt_remediation_advice" : "Use getDescription instead.",
       },
