@@ -50,6 +50,8 @@ public class GapFinderTest {
 		{
 		File ff = new File("/SomePath", "SomeFilename");
 		FileInputStream fs = new FileInputStream(ff);
+		
+		exitTestInBizarreFashion();
 		}
 		catch (FileNotFoundException fne) {
             System.out.println("File not found");
