@@ -32,7 +32,7 @@
 		},
 
 		// Uncalled functions
-		/* {
+		 {
 			violation_name : "UNTESTED-FN",
 			aggregation_granularity : "function",
 			minimum_line_coverage_pct : 100,
@@ -40,7 +40,7 @@
 				"untested-function", // not executed
 				"common-set", // common set of filters
 			]
-		}, */
+		}, 
 				// Uncalled functions
 		{
 			violation_name : "TESTED-FN",
@@ -48,7 +48,7 @@
 			minimum_line_coverage_pct : 100,
 			use_filters : [
 				"tested-function", // not executed
-				"common-set", // common set of filters
+				"ignore-test-files" // common set of filters
 			]
 		}	],
 
