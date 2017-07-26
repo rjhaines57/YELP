@@ -56,7 +56,7 @@ public class GapFinderTest {
 		catch (FileNotFoundException fne) {
             System.out.println("File not found");
 		}
-		exitTestInBizarreFashion();
+		
 		
 		
 		

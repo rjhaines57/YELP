@@ -1,10 +1,10 @@
-import com.coverity.primitives.Resource_LeakPrimitives;
+import com.coverity.primitives.Coverity;
 public class GapFinderTest {
 
 
-	void exitTestInBizarreFashion()
+	public void exitTestInBizarreFashion()
 	{
-		System.exit(0);
+		killpath();
 	}
 
     
