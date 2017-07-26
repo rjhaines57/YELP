@@ -43,14 +43,14 @@ public class UploadController {
 			{
 				throw new IOException("Invalid Path");
 			}
-		
+			else {
 			Path path = Paths.get(UPLOADED_FOLDER + origName);
 			Files.write(path, bytes);
 			Long fileId=fileService.createFile(filename.getOriginalFilename(),description);
 			Path newPath = Paths.get(UPLOADED_FOLDER + "log_"+fileId);
 			
 			Files.move(path, newPath);
-			
+			}
 			
 			
 			redirectAttributes.addFlashAttribute("message",
