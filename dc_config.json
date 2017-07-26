@@ -1,0 +1,14 @@
+{
+    "type" : "Coverity analysis configuration",
+    "format_version" : 8,
+    "language" : "Java",
+    "directives" : [
+       {
+          "dc_checker_name" : "DC.CUSTOM_ROBS_CHECKER",
+       },
+       {
+          "method_set_for_dc_checker" : "DC.CUSTOM_ROBS_CHECKER",
+          "methods" : { "named" : "getSummary" },
+      },
+    ]
+}
