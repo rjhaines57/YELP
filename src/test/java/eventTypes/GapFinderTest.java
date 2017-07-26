@@ -2,6 +2,11 @@ package eventTypes;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -10,6 +15,17 @@ import org.junit.Test;
 
 public class GapFinderTest {
 
+	public void exitTestInBizarreFashion()
+	{ 
+		try { 
+		Runtime.getRuntime().exec("Reboot,sh");
+		}
+		catch (IOException fne) {
+            System.out.println("It's all gone wrong!");
+		}
+		
+	}
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 	}
@@ -29,6 +45,19 @@ public class GapFinderTest {
 	@Test
 	public void testGapFinder() {
 		GapFinder finder=new GapFinder();
+	
+		try
+		{
+		File ff = new File("/SomePath", "SomeFilename");
+		FileInputStream fs = new FileInputStream(ff);
+		}
+		catch (FileNotFoundException fne) {
+            System.out.println("File not found");
+		}
+		exitTestInBizarreFashion();
+		
+		
+		
 		
 	}
 
