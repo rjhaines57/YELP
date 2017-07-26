@@ -132,16 +132,18 @@ public class LogParser {
 
 						for (EventTypeInterface eventType : eventTypeMap.values()) {
 							ArrayList<Event> returnedComplexEvents = eventType.processState(event);
-							if (returnedComplexEvents != null) {
+						//	if (returnedComplexEvents != null) {
+							logger.log(Level.INFO, "complexEvents: "+returnedComplexEvents.size());
 								if (eventMap.containsKey(myLine.getLineNo())) {
 									eventMap.get(myLine.getLineNo()).addAll(returnedComplexEvents);
-								} else {
+								} 
+								else {
 									ArrayList<Event> tmp4 = new ArrayList<Event>();
 									tmp4.addAll(returnedComplexEvents);
 									eventMap.put(myLine.getLineNo(), tmp4);
 								}
 								eventList.addAll(returnedComplexEvents);
-							}
+						//	}
 						}
 					} 
 					
