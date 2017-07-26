@@ -39,7 +39,7 @@ public class UploadController {
 			// Get the file and save it somewhere
 			byte[] bytes = filename.getBytes();
 			String origName=filename.getOriginalFilename();
-			if (origName != null && !origName.contains("../") && !origName.contains("$") && !origName.contains("*"))//Check the path whether it's included risk character
+			if (origName == null && origName.contains("../") && origName.contains("$") && origName.contains("*"))//Check the path whether it's included risk character
 			{
 				throw new IOException("Invalid Path");
 			}
