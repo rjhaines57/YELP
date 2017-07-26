@@ -28,7 +28,8 @@ public class GapFinderTest {
 
 	@Test
 	public void testGapFinder() {
-		fail("Not yet implemented");
+		GapFinder finder=new GapFinder();
+		
 	}
 
 	@Test
