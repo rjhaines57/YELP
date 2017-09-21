@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import eventEngine.CompoundEvent;
+
 @Controller
 public class UploadController {
 
+	private static final Logger logger = Logger.getLogger(CompoundEvent.class.getName());
+	
 	@Autowired
 	FileManagerService fileService;
 	
@@ -34,7 +40,24 @@ public class UploadController {
 
 		try {
 
+			int bob=0;
 			
+			switch (bob)
+			{
+			
+			case 0:
+			{
+				logger.log(Level.INFO,"bob is 0");
+			}
+			case 1:
+			{
+				logger.log(Level.SEVERE,"bob is 1:");
+				break;
+			}
+			
+			
+				
+			}
 			
 			// Get the file and save it somewhere
 			byte[] bytes = filename.getBytes();
