@@ -46,8 +46,8 @@ public class CompoundChecker implements EventTypeInterface {
 		
 
 		String key = transition.condition.key;
-		if (event.getEventMetaData() != null && !event.getEventMetaData().containsKey(key))
-			return false;
+	//	if (event.getEventMetaData() != null && !event.getEventMetaData().containsKey(key))
+	//		return false;
 		String eventValue=event.getEventMetaData().get(key);
 				
 		logger.log(Level.INFO, "We're still doing a comparison!!!!!"+event.getEventMetaData().get(key));

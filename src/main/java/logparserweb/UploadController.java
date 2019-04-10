@@ -16,66 +16,69 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+//import com.coverity.annotations.*;
 import eventEngine.CompoundEvent;
+
 
 @Controller
 public class UploadController {
 
 	private static final Logger logger = Logger.getLogger(CompoundEvent.class.getName());
-	
+
+	public String checkSafeFileName(String fileName)
+	{
+
+		if (fileName != null && (fileName.contains("../") || fileName.contains("$") || fileName.contains("*")))
+		{
+			return null;
+		}
+
+		return fileName;
+	}
+
+
 	@Autowired
 	FileManagerService fileService;
-	
+
 	// Save the uploaded file to this folder
 	private static String UPLOADED_FOLDER = "C://Tmp//logparser//";
 
 	@RequestMapping("/upload")
 	public String singleFileUpload(@RequestParam("filename") MultipartFile filename, @RequestParam("description") String description,
-			RedirectAttributes redirectAttributes) {
-
-		if (filename.isEmpty()) {
-			redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-			return "redirect:uploadStatus";
-		}
+								   RedirectAttributes redirectAttributes) {
 
 		try {
 
-			int bob=0;
-			
-			switch (bob)
-			{
-			
-			case 0:
-			{
-				logger.log(Level.INFO,"bob is 0");
+			if (filename.isEmpty()) {
+				redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+				return "redirect:uploadStatus";
 			}
-			case 1:
-			{
-				logger.log(Level.SEVERE,"bob is 1:");
-				break;
-			}
-			
-			
-				
-			}
-			
+
+
+
 			// Get the file and save it somewhere
 			byte[] bytes = filename.getBytes();
-			String origName=filename.getOriginalFilename();
-			if (origName == null && origName.contains("../") || origName.contains("$") || origName.contains("*"))//Check the path whether it's included risk character
+
+			    String safeName=filename.getOriginalFilename();
+			//String safeName=checkSafeFileName(filename.getOriginalFilename());
+
+			if (safeName == null)
 			{
 				throw new IOException("Invalid Path");
 			}
 			else {
-			Path path = Paths.get(UPLOADED_FOLDER + origName);
-			Files.write(path, bytes);
-			Long fileId=fileService.createFile(filename.getOriginalFilename(),description);
-			Path newPath = Paths.get(UPLOADED_FOLDER + "log_"+fileId);
-			
-			Files.move(path, newPath);
+
+				Path path = Paths.get(UPLOADED_FOLDER + safeName);
+
+
+				Files.write(path, bytes);
+				Long fileId=fileService.createFile(filename.getOriginalFilename(),description);
+				Path newPath = Paths.get(UPLOADED_FOLDER + "log_"+fileId);
+
+				Files.move(path, newPath);
 			}
-			
-			
+
+
 			redirectAttributes.addFlashAttribute("message",
 					"You successfully uploaded '" + filename.getOriginalFilename() + "'");
 
@@ -87,7 +90,27 @@ public class UploadController {
 	}
 
 	@GetMapping("/uploadStatus")
+	@SuppressWarnings("fallthrough")
 	public String uploadStatus() {
+		int kate=0;
+
+		switch (kate)
+		{
+
+			case 0:
+			{
+				logger.log(Level.INFO,"bob is 0");
+			}
+			case 1:
+			{
+				logger.log(Level.SEVERE,"bob is 1:");
+				break;
+			}
+
+
+
+		}
+
 		return "uploadStatus";
 	}
 
