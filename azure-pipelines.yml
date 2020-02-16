@@ -24,7 +24,7 @@ steps:
 - task: Polaris@0
   inputs:
     polarisURL: 'http://sipse.polaris.synopsys.com'
-    polarisAccessToken: '$(polarisAccessToken)'
+    polarisAccessToken: '$(POLARISACCESSTOKEN)'
     polarisProjectName: 'RJH-YELP2'
     polarisEnableAuditMode: true
     polarisYamlSelection: 'default'
