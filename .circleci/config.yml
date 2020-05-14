@@ -3,6 +3,14 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
+workflows:
+  test-env-vars:
+    jobs:
+      - build:
+          context: Polaris
+
+
+
 jobs:
   build:
     context: Polaris
@@ -41,6 +49,11 @@ jobs:
       - run: curl --output polaris.zip -L https://sipse.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip
       
       - run: unzip polaris.zip 
+      
+      - run: 
+          name: "echo an env var that is part of our context"
+          command: |
+            echo $POLARIS_SERVER_URL
       
       - run: polaris_cli-linux64-1.6.99/bin/polaris analyze
       
