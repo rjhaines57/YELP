@@ -3,14 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
-workflows:
-  test-env-vars:
-    jobs:
-      - build:
-          context: Polaris
-
-
-
 jobs:
   build:
     context: Polaris
