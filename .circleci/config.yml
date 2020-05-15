@@ -5,16 +5,15 @@
 version: 2.1
 
 workflows:
-   my-workflow:
-     jobs:
-       - run-polaris:
-           context: Polaris
+    my-workflow:
+        jobs:
+        - run-polaris:
+            context: Polaris
 
 jobs:
-  run-polaris:
-    build:
-      context: Polaris
-      docker:
+    run-polaris:
+
+        docker:
         # specify the version you desire here
         - image: circleci/openjdk:8-jdk
   
@@ -23,14 +22,15 @@ jobs:
         # documented at https://circleci.com/docs/2.0/circleci-images/
         # - image: circleci/postgres:9.4
   
-      working_directory: ~/repo
+        working_directory: ~/repo
   
-      environment:
+        environment:
         # Customize the JVM maximum heap limit
-        JVM_OPTS: -Xmx3200m
-        TERM: dumb
+            JVM_OPTS: -Xmx3200m
+            TERM: dumb
   
-      steps:
+        
+        steps:
         - checkout
 
         - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
