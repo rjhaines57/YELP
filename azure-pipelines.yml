@@ -25,7 +25,6 @@ steps:
   inputs:
     polarisURL: 'http://sipse.polaris.synopsys.com'
     polarisAccessToken: 'vfaoijnnep2g34akpiaeqjvbm0s8ml83mvbesbpc1fl5t5un1io0'
-    polarisProjectName: 'RJH-YELP2'
     polarisBuildCommand: "mvn package" 
     polarisEnableAuditMode: true
     polarisYamlSelection: 'default'
