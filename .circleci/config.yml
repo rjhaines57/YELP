@@ -42,20 +42,25 @@ jobs:
         - save_cache: # saves the project dependencies
             paths:
               - ~/.m2
-              - ~/.synopsys/polaris/coverity-tools-linux64-2020.06
             key: yelp-cache-{{ checksum "pom.xml" }}
         
         - run: mvn package # run the actual tests
         
         - run: curl --output polaris.zip -L https://sipse.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip
         
+        - restore_cache: # restore cache based on polaris.zip, not ideal but will do the job in the short term
+            key: yelp-polaris-cache-{{ checksum "polaris.zip" }}
+        
         - run: unzip polaris.zip 
         
-        - run: 
-            name: "echo an env var that is part of our context"
-            command: |
-              echo $POLARIS_SERVER_URL
-        
+        - run: polaris_cli-linux64-*/bin/polaris install
+
+        - save_cache: # saves the project dependencies
+            paths:
+              - ~/.synopsys/polaris/coverity-tools-linux64-2020.06
+            key: yelp-polaris-cache-{{ checksum "polaris.zip" }}
+
+
         - run: polaris_cli-linux64-*/bin/polaris analyze
       
       
