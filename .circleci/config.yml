@@ -49,7 +49,7 @@ jobs:
         - run: curl --output polaris.zip -L https://sipse.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip
         
         - restore_cache: # restore cache based on polaris.zip, not ideal but will do the job in the short term
-            key: yelp-polaris-cache-{{ checksum "polaris.zip" }}
+            key: yelp-polaris-cache2-{{ checksum "polaris.zip" }}
         
         - run: unzip polaris.zip 
         
@@ -57,8 +57,8 @@ jobs:
 
         - save_cache: # saves the project dependencies
             paths:
-              - ~/.synopsys/polaris/coverity-tools-linux64-2020.06
-            key: yelp-polaris-cache-{{ checksum "polaris.zip" }}
+              - ~/.synopsys/polaris/coverity-tools-*
+            key: yelp-polaris-cache2-{{ checksum "polaris.zip" }}
 
 
         - run: polaris_cli-linux64-*/bin/polaris analyze
