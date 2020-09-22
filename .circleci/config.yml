@@ -42,6 +42,7 @@ jobs:
         - save_cache: # saves the project dependencies
             paths:
               - ~/.m2
+              = ~/.synopsys/polaris/coverity-tools-linux64-2020.06
             key: yelp-cache-{{ checksum "pom.xml" }}
         
         - run: mvn package # run the actual tests
