@@ -46,22 +46,21 @@ jobs:
         
         - run: mvn package # run the actual tests
         
-        - run: curl --output polaris.zip -L https://sipse.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip
+        - run: curl --output polaris.zip -L https://sipse.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip # Download Polaris CLI zip file
         
-        - restore_cache: # restore cache based on polaris.zip, not ideal but will do the job in the short term
-            key: yelp-polaris-cache3-{{ checksum "polaris.zip" }}
+        - restore_cache: # restore cache based on checksum of polaris.zip
+            key: polaris-cache-{{ checksum "polaris.zip" }}
         
         - run: unzip polaris.zip 
-        
-        - run: polaris_cli-linux64-*/bin/polaris install
+        - run: polaris_cli-linux64-*/bin/polaris install # Run "install" only to install tools.
 
-        - save_cache: # saves the project dependencies
+        - save_cache: # saves installed tools to a cache to speed up subsequent runs
             paths:
               - ~/.synopsys/polaris/
-            key: yelp-polaris-cache3-{{ checksum "polaris.zip" }}
+            key: polaris-cache-{{ checksum "polaris.zip" }}
 
 
-        - run: polaris_cli-linux64-*/bin/polaris analyze
+        - run: polaris_cli-linux64-*/bin/polaris analyze # Run analyze command to capture project and send to polaris
       
       
         - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
