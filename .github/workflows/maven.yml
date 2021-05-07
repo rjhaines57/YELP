@@ -22,3 +22,20 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - name: Scan with Polaris
+      uses: devsecops-test/polaris-action@v1
+      with:
+        polarisServerUrl: ${{secrets.POLARIS_SERVER_URL}}
+        polarisAccessToken: ${{secrets.POLARIS_ACCESS_TOKEN}}
+        polarisProjectName: RJH-YELP
+        polarisAdditionalArgs: --coverity-ignore-capture-failure 
+        githubUrl: https://api.github.com/repos/${{github.repository}}/commits/${{github.sha}}
+#        githubCreds: "${{secrets.GITHUB_USERNAME}}:${{secrets.GITHUB_TOKEN}}"     #Needed only if repository is private
+
+    - name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        # Path to SARIF file relative to the root of the repository
+        sarif_file: polaris-scan-results.sarif.json
+
