@@ -2,7 +2,7 @@ resources:
   repositories:
     - repository: 'synopsys-azure-templates'
       type: 'git'
-      name: 'robhaines/synopsys-azure-templates'
+      name: 'synopsys-azure-templates'
 
 
 pool:
