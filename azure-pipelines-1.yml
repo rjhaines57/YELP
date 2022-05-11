@@ -1,6 +1,6 @@
 resources:
   repositories:
-    - repository: 'synopsys-azure-templates'
+    - repository: 'robhaines/synopsys-azure-templates'
       type: 'git'
       name: 'synopsys-azure-templates'
 
