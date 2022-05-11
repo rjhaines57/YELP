@@ -1,8 +1,8 @@
 resources:
   repositories:
-    - repository: 'robhaines/synopsys-azure-templates'
+    - repository: 'synopsys-azure-templates'
       type: 'git'
-      name: 'synopsys-azure-templates'
+      name: 'synopsys-azure-templates/synopsys-azure-templates'
 
 
 pool:
