@@ -14,3 +14,5 @@ if [[ "${CIRCLE_BRANCH}" = "${MAIN_BRANCH}" ]]; then
 else
 
   echo '## Running incremental scan on main branch ##'
+
+endif
