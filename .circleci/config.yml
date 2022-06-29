@@ -38,7 +38,7 @@ jobs:
             key: yelp-cache-{{ checksum "pom.xml" }}
 
         - run: ./test.sh
-          -
+          
         - run: mvn dependency:go-offline # gets the project dependencies
         
         - save_cache: # saves the project dependencies
