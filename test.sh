@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set
 
 OWNER=${OWNER:-"Default Team"}
 MAIN_BRANCH=$(git symbolic-ref --short refs/remotes/origin/HEAD | awk -F/ '{print $NF}')
