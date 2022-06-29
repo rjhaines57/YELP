@@ -15,5 +15,5 @@ else
 
   echo '## Running incremental scan on main branch ##'
 
-endif
+fi
 
