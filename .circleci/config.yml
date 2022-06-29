@@ -15,7 +15,7 @@ jobs:
 
         docker:
         # specify the version you desire here
-        - image: circleci/openjdk:8-jdk
+        - image: cimg/openjdk:8-jdk
   
         # Specify service dependencies here if necessary
         # CircleCI maintains a library of pre-built images
@@ -38,7 +38,7 @@ jobs:
             key: yelp-cache-{{ checksum "pom.xml" }}
 
         - run: ./test.sh
-          
+
         - run: mvn dependency:go-offline # gets the project dependencies
         
         - save_cache: # saves the project dependencies
