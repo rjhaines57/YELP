@@ -1,0 +1,75 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2.1
+
+workflows:
+    my-workflow:
+        jobs:
+        - run-polaris:
+            context: Polaris
+
+jobs:
+    run-polaris:
+
+        docker:
+        # specify the version you desire here
+        - image: cimg/openjdk:8.0
+  
+        # Specify service dependencies here if necessary
+        # CircleCI maintains a library of pre-built images
+        # documented at https://circleci.com/docs/2.0/circleci-images/
+        # - image: circleci/postgres:9.4
+  
+        working_directory: ~/repo
+  
+        environment:
+        # Customize the JVM maximum heap limit
+            JVM_OPTS: -Xmx3200m
+            TERM: dumb
+  
+        
+        steps:
+        - checkout
+
+        - restore_cache: # restore the saved cache after the first run or if `pom.xml` has changed
+            # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
+            key: yelp-cache-{{ checksum "pom.xml" }}
+
+        - run: ./test.sh
+
+        - run: mvn dependency:go-offline # gets the project dependencies
+        
+        - save_cache: # saves the project dependencies
+            paths:
+              - ~/.m2
+            key: yelp-cache-{{ checksum "pom.xml" }}
+        
+        - run: mvn package # run the actual tests
+        
+        - run: curl --output polaris.zip -L https://sipse.polaris.synopsys.com/api/tools/polaris_cli-linux64.zip # Download Polaris CLI zip file
+        
+        - restore_cache: # restore cache based on checksum of polaris.zip
+            key: polaris-cache-{{ checksum "polaris.zip" }}
+        
+        - run: unzip polaris.zip 
+        - run: polaris_cli-linux64-*/bin/polaris install # Run "install" only to install tools.
+
+        - save_cache: # saves installed tools to a cache to speed up subsequent runs
+            paths:
+              - ~/.synopsys/polaris/
+            key: polaris-cache-{{ checksum "polaris.zip" }}
+
+
+        - run: polaris_cli-linux64-*/bin/polaris analyze # Run analyze command to capture project and send to polaris
+      
+      
+        - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
+         # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+            path: target/surefire-reports
+      
+        - store_artifacts: # store the uberjar as an artifact
+        # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
+            path: target/logParser1-0.0.1-SNAPSHOT.war
+        # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples    
