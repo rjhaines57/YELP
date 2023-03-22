@@ -1,0 +1,25 @@
+# This workflow analyse a code with Coverity
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  coverity:
+
+    runs-on: self-hosted
+
+    steps:
+      env:
+        COVERITY_PASSPHRASE: ${{ secrets.SuperSecret }}
+    - uses: actions/checkout@v2
+    - name: Capture with Coverity
+      run: cov-capture --dir idir --project-dir .
+      run: cov-analyze --dir idir --webapp-security
+      run: cov-commit-defects --dir idir --url "http://192.168.1.200:8080" --user admin --stream yelp
