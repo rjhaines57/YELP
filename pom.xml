@@ -23,6 +23,7 @@
                 </configuration>
             </plugin>
     
+	    
     
     <plugin>
   <artifactId>maven-assembly-plugin</artifactId>
