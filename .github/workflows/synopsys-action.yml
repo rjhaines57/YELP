@@ -14,7 +14,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.12.0
         with:
-          polaris_server_url: ${{ vars.POLARIS_SERVER_URL }}
+          polaris_server_url: "https://poc.polaris.synopsys.com"
           polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: RJH-Test
           polaris_project_name: YELP
@@ -49,7 +49,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.12.0
         with:
-          polaris_server_url: ${{ vars.POLARIS_SERVER_URL }}
+          polaris_server_url: "https://poc.polaris.synopsys.com"
           polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: RJH-Test
           polaris_project_name: YELP
