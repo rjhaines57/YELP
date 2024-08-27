@@ -15,7 +15,7 @@ jobs:
         uses: synopsys-sig/synopsys-action@v1.12.0
         with:
           polaris_server_url: "https://poc.polaris.synopsys.com"
-          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_access_token: ${{ vars.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: RJH-Test
           polaris_project_name: YELP
           polaris_assessment_types: "SAST"
@@ -50,7 +50,7 @@ jobs:
         uses: synopsys-sig/synopsys-action@v1.12.0
         with:
           polaris_server_url: "https://poc.polaris.synopsys.com"
-          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_access_token: ${{ vars.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: RJH-Test
           polaris_project_name: YELP
           polaris_assessment_types: "SAST"
